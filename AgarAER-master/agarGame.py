@@ -9,13 +9,64 @@ from camera import Camera
 import common
 
 class agarGame :
-    def __init__(self,painter,cam) -> None:
+    def __init__(self) -> None:
         self.players = {}
         self.counter = 0
-        self.painter = painter
-        self.cam = cam
-        self.current_player = Player(common.MAIN_SURFACE,cam, "GeoVas")
+        # Initialize essential entities
+        self.cam = Camera()
+        self.clock = pygame.time.Clock()
+        self.grid = Grid(common.MAIN_SURFACE, self.cam)
+        self.cells = CellList(common.MAIN_SURFACE, self.cam, 2000)
+        self.blob2 = Player(common.MAIN_SURFACE,self.cam,"sadasdas")
+        self.hud = HUD(common.MAIN_SURFACE, self.cam)
+        self.painter = Painter()
+        self.current_player = Player(common.MAIN_SURFACE,self.cam, "GeoVas")
+        self.drawOnScreen()
+        
+        
+        
+        
+    def drawOnScreen(self):
+        self.painter.add(self.grid) 
+        self.painter.add(self.cells)
+        self.painter.add(self.current_player)
+        self.painter.add(self.hud)
 
+    def startGameLoop(self):
+        # Game main loop
+        while(True):
+            
+            self.clock.tick(70)
+            
+            self.reactToInput()
+            
+            self.current_player.move()
+            #self.current_player.feed(players)
+            self.current_player.collisionDetection(self.cells.list)
+            self.cam.update(self.current_player)
+            common.MAIN_SURFACE.fill((242,251,255))
+            # Uncomment next line to get dark-theme
+            #surface.fill((0,0,0))
+            self.painter.paint()
+            # Start calculating next frame
+            pygame.display.flip()
+            
+    def reactToInput(self):
+        for e in pygame.event.get():
+                if(e.type == pygame.KEYDOWN):
+                    if(e.key == pygame.K_ESCAPE):
+                        pygame.quit()
+                        print("Quiting game!")
+                        quit()
+                    if(e.key == pygame.K_SPACE):
+                        del(self.cam)
+                        self.current_player.split()
+                    if(e.key == pygame.K_w):
+                        self.current_player.feed()
+                if(e.type == pygame.QUIT):
+                    pygame.quit()
+                    quit()
+                    
     def add_player(self,player):
         #tmpid = self.generateID(player)
         self.players[self.counter] = player
