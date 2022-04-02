@@ -1,6 +1,7 @@
 class networkClient():
-    def __init__(self) -> None:
-        pass
+    def __init__(self,addr,port) -> None:
+        self.addr = addr
+        self.port = port
 
     def sendTo():
         pass
@@ -14,3 +15,5 @@ class networkClient():
 
 
 """ Aqui a meio vai aparecer um observers pattern """
+def initConnectionToServer():
+   pass

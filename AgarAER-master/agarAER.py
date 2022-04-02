@@ -18,8 +18,6 @@ pygame.init()
 pygame.display.set_caption("{} - v{}".format(NAME, VERSION))
 
     
-
-
-
 agarGame = agarGame()
+agarGame.configGame({})
 agarGame.startGameLoop()

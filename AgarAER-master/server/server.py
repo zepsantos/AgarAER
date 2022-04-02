@@ -9,6 +9,7 @@ class Server:
         self.sock = socket.socket(socket.AF_INET6, # Internet
 						socket.SOCK_DGRAM) # UDP
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
+        self.sock.setsockopt()
         self.game = Game()
 
     def startServer(self):
@@ -37,3 +38,14 @@ Cliente liga pela primeira vez, servidor envia o seu id e a sua cor e a sua posi
 Cliente a cada frame envia mensagem com id e estado de jogo"""
 
 """Servidor pega na mensagem de cada cliente e retransmite aos outros"""
+
+
+
+def run():
+    pass
+
+
+
+
+if __name__ == '__main__':
+    run()
