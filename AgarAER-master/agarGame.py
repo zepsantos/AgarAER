@@ -36,7 +36,7 @@ class agarGame :
         # Game main loop
         while(True):
             
-            self.clock.tick(70)
+            self.clock.tick(140)
             
             self.reactToInput()
             
@@ -59,7 +59,7 @@ class agarGame :
                         print("Quiting game!")
                         quit()
                     if(e.key == pygame.K_SPACE):
-                        del(self.cam)
+                        #del(self.cam)
                         self.current_player.split()
                     if(e.key == pygame.K_w):
                         self.current_player.feed()
