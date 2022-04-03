@@ -44,6 +44,7 @@ class agarGame :
             #self.current_player.feed(players)
             self.current_player.collisionDetection(self.cells.list)
             self.cam.update(self.current_player)
+            
             common.MAIN_SURFACE.fill((242,251,255))
             # Uncomment next line to get dark-theme
             #surface.fill((0,0,0))
@@ -79,6 +80,10 @@ class agarGame :
     def update_player(self,player):
         pass
         
+    def configGame(self,configs):
+        pass
+        
+            
     def get_player_playing(self):
         return self.current_player
 

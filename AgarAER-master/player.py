@@ -24,8 +24,8 @@ class Player(Drawable):
         self.id = id
         self.x = random.randint(100,400)
         self.y = random.randint(100,400)
-        self.mass = 20
-        self.speed = 4
+        self.mass = 200
+        self.speed = 5
         self.color = col = random.choice(Player.COLOR_LIST)
         self.outlineColor = (
             int(col[0]-col[0]/3),
@@ -40,8 +40,16 @@ class Player(Drawable):
         """Detects cells being inside the radius of current player.
         Those cells are eaten.
         """
+        zoom = self.camera.zoom
+        radius= int(self.mass/2 + 3)*zoom
+        
+        coordCima = (self.y) + radius  
+        coordBaixo= (self.y) - radius  
+        coordDir= (self.x) + radius  
+        coordEsq = (self.x) - radius  
+         
         for edible in edibles:
-            if(common.getDistance((edible.x, edible.y), (self.x,self.y)) <= self.mass/2):
+            if( (common.getDistance((edible.x, edible.y), (self.x,self.y)) <= self.mass/2) and (coordDir  < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima> 0) ):
                 self.mass+=0.5
                 edibles.remove(edible)
 
@@ -68,14 +76,63 @@ class Player(Drawable):
             vy = self.speed - math.fabs(vx)
         tmpX = self.x + vx
         tmpY = self.y + vy
-        if tmpX > 0+int((self.mass/2 + 3))  and tmpX < 2000-int((self.mass/2 + 3)):
-            self.x = tmpX
-        if tmpY >0+int((self.mass/2 + 3)) and tmpY<2000-int((self.mass/2 + 3)):
-            self.y = tmpY        
-        #print(tmpX , tmpY)
-     
+        
+        zoom = self.camera.zoom
+        radius= int(self.mass/2 + 3)
+        print('raio ',radius)
+        
+        
+        coordCima = (self.y) - radius 
+        coordBaixo= (self.y) + radius  
+        coordDir= (self.x) + radius  
+        coordEsq = (self.x) - radius
+        
+        print('centro y ', self.y, 'coordCima ',coordCima, 'coordBaixo ', coordBaixo)       
+        print('centro x ', self.x, 'coordDir ',coordDir, 'coordEsq ', coordEsq)      
+        print('velX ', vx, 'velY ', vy)        
+        
+        
+        if (coordEsq > 0):
+            self.x += vx
+        else:
+            if (vx > 0):
+                self.x += vx
+            else:
+                self.x = radius 
+            
+        if (coordDir < 2000):
+            self.x += vx    
+        else:
+            if(vx < 0):
+                self.x += vx 
+            else:
+                #self.x = radius  
+                self.x = 2000-radius    
+                
+        if (coordCima > 0):
+            self.y += vy
+        else:
+            if (vy > 0):
+                self.y += vy
+            else:
+                self.y = radius    
+                        
+                
+        if (coordBaixo < 2000):
+            self.y += vy    
+        else:
+            if(vy < 0):
+                self.y += vy
+            else:
+                self.y= 2000-radius     
+                   
+       
         
 
+    def withinBounds(self,pos):
+        (x,y) = pos
+        pass
+        
     def feed(self, players):
         """Detects other players being inside the radius of current player.
         Those players are eaten.

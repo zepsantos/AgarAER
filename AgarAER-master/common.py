@@ -1,7 +1,7 @@
 import pygame
 import math
 # Definição de dimensões
-SCREEN_WIDTH, SCREEN_HEIGHT = (800,500)
+SCREEN_WIDTH, SCREEN_HEIGHT = (1200,800)
 PLATFORM_WIDTH, PLATFORM_HEIGHT = (2000,2000)
 
 # Surface Definitions
