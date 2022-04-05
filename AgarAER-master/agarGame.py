@@ -63,7 +63,8 @@ class agarGame :
                         #del(self.cam)
                         self.current_player.split()
                     if(e.key == pygame.K_w):
-                        self.current_player.feed()
+                        player2remove = self.current_player.feed(self.players)
+                        self.remove_player(player2remove)
                 if(e.type == pygame.QUIT):
                     pygame.quit()
                     quit()
@@ -74,7 +75,8 @@ class agarGame :
         self.counter += 1
         self.painter.add(player)
         
-    def remove_player(self):
+    def remove_player(self,player):
+        self.players.pop(player)
         pass
     
     def update_player(self,player):

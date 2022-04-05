@@ -87,9 +87,9 @@ class Player(Drawable):
         coordDir= (self.x) + radius  
         coordEsq = (self.x) - radius
         
-        print('centro y ', self.y, 'coordCima ',coordCima, 'coordBaixo ', coordBaixo)       
-        print('centro x ', self.x, 'coordDir ',coordDir, 'coordEsq ', coordEsq)      
-        print('velX ', vx, 'velY ', vy)        
+        #print('centro y ', self.y, 'coordCima ',coordCima, 'coordBaixo ', coordBaixo)
+        #print('centro x ', self.x, 'coordDir ',coordDir, 'coordEsq ', coordEsq)
+        #print('velX ', vx, 'velY ', vy)
         
         
         if (coordEsq > 0):
@@ -140,7 +140,7 @@ class Player(Drawable):
         for player in players:
             if(common.getDistance((player.x, player.y), (self.x,self.y)) <= self.mass/2):
                 self.mass+=0.5
-                players.remove(player)
+                return player
         pass
 
     def split(self):
