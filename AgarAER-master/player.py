@@ -1,4 +1,5 @@
 from drawable import Drawable
+from painter import Painter
 
 import random
 import common
@@ -19,13 +20,13 @@ class Player(Drawable):
 
     FONT_COLOR = (50, 50, 50)
     
-    def __init__(self, surface,camera, id , name = ""):
+    def __init__(self, surface,camera, id , name):
         super().__init__(surface, camera)
         self.id = id
-        self.x = random.randint(100,400)
-        self.y = random.randint(100,400)
+        self.x = random.randint(100,2000)
+        self.y = random.randint(100,2000)
         self.mass = 200
-        self.speed = 5
+        self.speed = 3
         self.color = col = random.choice(Player.COLOR_LIST)
         self.outlineColor = (
             int(col[0]-col[0]/3),
@@ -33,7 +34,21 @@ class Player(Drawable):
             int(col[2]-col[2]/3))
         if name: self.name = name
         else: self.name = "Anonymous"
-        self.pieces = []
+        #self.pieces = []
+
+    def update(self, x, y, mass):
+        self.set_x(x)
+        self.set_y(y)
+        self.set_mass(mass)
+
+    def set_x(self, x):
+        self.x = x
+
+    def set_y(self, y):
+        self.y = y
+
+    def set_mass(self, mass):
+        self.mass = mass
 
 
     def collisionDetection(self, edibles):
@@ -49,8 +64,8 @@ class Player(Drawable):
         coordEsq = (self.x) - radius  
          
         for edible in edibles:
-            if( (common.getDistance((edible.x, edible.y), (self.x,self.y)) <= self.mass/2) and (coordDir  < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima> 0) ):
-                self.mass+=0.5
+            if (common.getDistance((edible.x, edible.y), (self.x, self.y)) <= self.mass / 2) and (coordDir < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima > 0):
+                self.mass+=0.25
                 edibles.remove(edible)
 
 
@@ -79,7 +94,7 @@ class Player(Drawable):
         
         zoom = self.camera.zoom
         radius= int(self.mass/2 + 3)
-        print('raio ',radius)
+        #print('raio ',radius)
         
         
         coordCima = (self.y) - radius 
@@ -132,16 +147,27 @@ class Player(Drawable):
     def withinBounds(self,pos):
         (x,y) = pos
         pass
+    
+    def removePlayer(players,player2remove):
+        for  player in players:
+            if (player.value == player2remove):
+                players.pop(player)
         
-    def feed(self, players):
+        
+    def feed(self, players,paintings):
         """Detects other players being inside the radius of current player.
         Those players are eaten.
-        """
-        for player in players:
+        """    
+        for key,player in players.items():
             if(common.getDistance((player.x, player.y), (self.x,self.y)) <= self.mass/2):
-                self.mass+=0.5
-                return player
-        pass
+                self.mass+= (player.mass/2) 
+                players.pop(key)
+                paintings.remove(player)
+                
+                break
+           
+                     
+        
 
     def split(self):
         """Unsupported feature.

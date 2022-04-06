@@ -45,6 +45,9 @@ class CellList(Drawable):
         self.count = numOfCells
         self.list = []
         for i in range(self.count): self.list.append(Cell(self.surface, self.camera))
+        
+    def add(self,cell):
+        self.list.append(cell)
 
     def draw(self):
         for cell in self.list:
