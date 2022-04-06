@@ -20,12 +20,12 @@ class Player(Drawable):
 
     FONT_COLOR = (50, 50, 50)
     
-    def __init__(self, surface,camera, id , name):
+    def __init__(self, surface,camera, id , name,mass):
         super().__init__(surface, camera)
         self.id = id
         self.x = random.randint(100,2000)
         self.y = random.randint(100,2000)
-        self.mass = 200
+        self.mass = mass
         self.speed = 3
         self.color = col = random.choice(Player.COLOR_LIST)
         self.outlineColor = (
@@ -34,21 +34,7 @@ class Player(Drawable):
             int(col[2]-col[2]/3))
         if name: self.name = name
         else: self.name = "Anonymous"
-        #self.pieces = []
-
-    def update(self, x, y, mass):
-        self.set_x(x)
-        self.set_y(y)
-        self.set_mass(mass)
-
-    def set_x(self, x):
-        self.x = x
-
-    def set_y(self, y):
-        self.y = y
-
-    def set_mass(self, mass):
-        self.mass = mass
+        self.pieces = []
 
 
     def collisionDetection(self, edibles):
@@ -64,7 +50,7 @@ class Player(Drawable):
         coordEsq = (self.x) - radius  
          
         for edible in edibles:
-            if (common.getDistance((edible.x, edible.y), (self.x, self.y)) <= self.mass / 2) and (coordDir < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima > 0):
+            if( (common.getDistance((edible.x, edible.y), (self.x,self.y)) <= self.mass/2) and (coordDir  < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima> 0) ):
                 self.mass+=0.25
                 edibles.remove(edible)
 

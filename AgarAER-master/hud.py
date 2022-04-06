@@ -17,10 +17,12 @@ class HUD(Drawable):
         self.players = players
         
     def sortDic_byMass(self):
-        temp = self.players
-        temp[len(temp)] = self.current_player
-        final = sorted(self.players.values(), key=operator.attrgetter('mass'))  
-        return final
+        # { Name : Mass }
+        sorted_Dict = {}
+        sorted_Dict[self.current_player.name] = self.current_player.mass
+        for player in self.players:
+            sorted_Dict[player.name]=player.mass
+        return sorted_Dict
             
         
     def draw(self):
@@ -33,26 +35,29 @@ class HUD(Drawable):
         drawText("Score: " + str(int(self.current_player.mass*2)),(10,SCREEN_HEIGHT-30))
         self.surface.blit(big_font.render("Leaderboard", 0, (255, 255, 255)), (SCREEN_WIDTH-157, 20))
         
+        counter=1
+        counter_str = str(counter)
+        message = counter_str + self.current_player.name
+        drawText(message,(SCREEN_WIDTH-157,20+(2*counter)*10))
+        counter=2
+                    
+        #for key in (sorted(self.players.values(), key=operator.attrgetter('mass'))):
+            #print(key.mass)
+        #sorted_Dic = sortDic_byMass(self) 
         
+        sorted_Dict = {}
+        sorted_Dict[self.current_player.name] = self.current_player.mass
+        for player in self.players.values():
+            sorted_Dict[player.name]=player.mass
         
-        
-        for key in (sorted(self.players.values(), key=operator.attrgetter('mass'))):
-            print(key.mass)
-            '''
-            if(self.current_player.mass > key.mass):
-                counter_str = str(counter)
-                message = counter_str + self.current_player.name
-                drawText(message,(SCREEN_WIDTH-157,20+(2*counter)*10))
-               
-            else:
-                counter_str = str(counter)
-                message = counter_str + self.key.name
-                drawText(message,(SCREEN_WIDTH-157,20+(2*counter)*10))
+        sorted_d = dict( sorted(sorted_Dict.items(), key=operator.itemgetter(1),reverse=True)) 
+            
+        print(sorted_d)      
+            
+        counter=1
+        for key in sorted_d:    
+            counter_str = str(counter)
+            message = counter_str + key
+            drawText(message,(SCREEN_WIDTH-157,20+(2*counter)*10))
             counter+=1
-            '''
-       
-        if(self.current_player.mass <= 500):
-            drawText("10. G #4",(SCREEN_WIDTH-157,20+25*10))
-        else:
-            drawText("10. Viliami",(SCREEN_WIDTH-157,20+25*10),(210,0,0)) 
             
