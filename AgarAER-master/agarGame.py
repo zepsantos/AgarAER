@@ -13,7 +13,7 @@ import common
 class agarGame :
     def __init__(self,player,cam) -> None:
         self.players = {}
-        self.counter = 0
+
         # Initialize essential entities
         self.cam = cam
         self.clock = pygame.time.Clock()
@@ -54,7 +54,7 @@ class agarGame :
         
         while(len(self.players) > 0):
             
-            self.clock.tick(140)
+            self.clock.tick(70)
             
             self.cell = Cell(common.MAIN_SURFACE, self.cam) 
             self.cells.add(self.cell)
@@ -106,9 +106,9 @@ class agarGame :
     def remove_player(self,player):
         self.players.pop(player)
         pass
-    
-    def update_player(self,player):
-        pass
+
+    def update_player(self, id, x, y, mass):
+        self.players[id].update(x, y, mass)
         
     def configGame(self,configs):
         pass

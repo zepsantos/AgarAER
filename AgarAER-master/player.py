@@ -151,8 +151,21 @@ class Player(Drawable):
                 paintings.remove(player)
                 
                 break
-           
-                     
+
+    def update(self, x, y, mass):
+        self.set_x(x)
+        self.set_y(y)
+        self.set_mass(mass)
+
+    def set_x(self, x):
+        self.x = x
+
+    def set_y(self, y):
+        self.y = y
+
+    def set_mass(self, mass):
+        self.mass = mass
+
         
 
     def split(self):
