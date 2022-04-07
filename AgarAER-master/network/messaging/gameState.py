@@ -9,9 +9,13 @@ class GameState(Message) :
     
     
     def get_newplayers_status(self):
-        return len(self.newplayers) == 0
+        return len(self.newplayers) > 0
     
     def get_game_state(self) :
         return self.gameState
 
-
+    def get_newplayers(self):
+        return self.newplayers
+        
+    def set_newplayers(self,newplayers):
+        self.newplayers = newplayers

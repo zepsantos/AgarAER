@@ -1,3 +1,4 @@
+import time
 from time import sleep
 
 from .game import Game
@@ -45,7 +46,7 @@ class Server:
         watcher = self.watcherDic[key]
         data ,addr = watcher.retrieveMessage()
         msg = pickle.loads(data)
-        logging.debug("Received player update from %s" % format(msg))
+        #logging.debug("Received player update from %s" % format(msg.get_player_update()))
         if msg.type == MessageType.PLAYER_UPDATE:
             self.received_client_update(msg, addr)
         else:
@@ -65,12 +66,16 @@ class Server:
         logging.log(logging.INFO, "New connection from %s" % str(addr))
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
         p = self.game.add_player(addr, authrequest.get_id(), authrequest.get_name())
+
         msgToSend = AuthenticationResponse(p.get_id(), self.createConfigForNewPlayers(p))
         finalmsg = pickle.dumps(msgToSend)
         tmpsock.sendto(finalmsg, (self.group_addr, authrequest.get_port()))
         self.listenForClientUpdates(authrequest.get_port())
         if not self.gameStarted:
             self.initGame()
+        else:
+            self.game.add_to_newplayers(p, 20)
+
 
     def initGame(self):
         self.gameStarted = True
@@ -87,7 +92,9 @@ class Server:
 
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
         while True:
+            time.sleep(0.5)
             msgToSendunpc = GameState(self.game.brief_convert_game_to_dic())
+            msgToSendunpc.set_newplayers(self.game.get_newplayers())
             msgToSend = pickle.dumps(msgToSendunpc)
             tmpsock.sendto(msgToSend, (self.group_addr, self.game.get_port()))
 

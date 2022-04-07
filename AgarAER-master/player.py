@@ -17,6 +17,7 @@ class Player(Drawable):
         self.mass = mass
         self.speed = speed
         self.color = col = color
+        self.lastposmove = (x,y)
         self.onScreen = False
         self.outlineColor = (
             int(col[0]-col[0]/3),
@@ -40,6 +41,9 @@ class Player(Drawable):
 
     def set_onScreen(self):
         self.onScreen = True
+
+    def get_lastposmov(self):
+        return self.lastposmove
 
     def is_onScreen(self):
         return self.onScreen
@@ -127,7 +131,10 @@ class Player(Drawable):
             if(vy < 0):
                 self.y += vy
             else:
-                self.y= 2000-radius     
+                self.y= 2000-radius
+
+        self.lastposmove = (self.x,self.y)
+
                    
        
         
@@ -148,7 +155,6 @@ class Player(Drawable):
                 self.mass+= (player.mass/2) 
                 players.pop(key)
                 paintings.remove(player)
-                
                 break
 
     def update(self, x, y, mass):

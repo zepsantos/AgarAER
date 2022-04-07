@@ -22,7 +22,7 @@ class agarGame :
         self.painter = Painter()
         self.atTickIsOver = None
         self.current_player = None
-
+        self.networkTime = 0
         self.hud = HUD(common.MAIN_SURFACE, self.cam)
         self.drawOnScreen()
         
@@ -49,10 +49,8 @@ class agarGame :
 
         self.hud.set_current_player(self.current_player)
         self.hud.set_players(self.players)
-        while  True : #len(self.players) > 0:
-            
-            self.clock.tick(70)
-
+        while  True :
+            currentTime = pygame.time.get_ticks()
             cell = Cell(common.MAIN_SURFACE, self.cam)
             self.cells.add(cell)
             
@@ -64,12 +62,15 @@ class agarGame :
             
             self.current_player.collisionDetection(self.cells.list)
             self.cam.update(self.current_player)
-            if self.atTickIsOver is not None:
+            if self.atTickIsOver is not None and currentTime - self.networkTime > 200:
                 self.atTickIsOver(self.current_player)
+                self.networkTime = pygame.time.get_ticks()
             common.MAIN_SURFACE.fill((242,251,255))
             # Uncomment next line to get dark-theme
             #common.MAIN_SURFACE.fill((0,0,0))
             self.painter.paint()
+            self.clock.tick(70)
+
             # Start calculating next frame
             pygame.display.flip()
     
@@ -106,20 +107,23 @@ class agarGame :
 
 
     def set_currentPlayer(self, player):
-        self.set_currentPlayer = player    
+        self.current_player = player
         
     def remove_player(self,player):
         self.players.pop(player)
         pass
 
     def update_player(self, id, x, y, mass):
-        self.players[id].update(x, y, mass)
+        if id in self.players:
+            self.players[id].update(x, y, mass)
 
     def update_game(self, msg):
         game = msg.get_game_state()
         if msg.get_newplayers_status() :
             for p in msg.get_newplayers():
-                self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
+                if p['id'] not in self.players:
+                    self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
+                    self.painter.add(self.players[p['id']])
         players = game['players']
         for player in players:
             self.update_player(player['id'], player['x'], player['y'], player['mass'])

@@ -4,7 +4,7 @@ class Game:
     def __init__(self) -> None:
         self.players = {}
         self.port = 6000
-
+        self.newplayers = []
     def add_player(self,addr,id,name):
         if id is None:
             temp_id = self.generate_id()
@@ -50,6 +50,24 @@ class Game:
         while temp_id in self.players:
             temp_id = uuid.uuid4()
         return str(temp_id)
+
+
+    def get_newplayers(self):
+        tmp = []
+        for p,c in self.newplayers:
+            self.newplayers.remove((p,c))
+            c -= 1
+            tmp.append(p.convert_to_dic())
+            if c != 0:
+                self.newplayers.append((p,c))
+        return tmp
+
+    def add_to_newplayers(self,p,warntime):
+        self.newplayers.append((p,warntime))
+
+
+
+
 
     def remove_player(self):
         pass
