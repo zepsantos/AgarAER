@@ -95,9 +95,13 @@ class agarGame :
     def add_player(self,id,x,y,mass,color,speed,name):
         #tmpid = self.generateID(player)
         p = Player(common.MAIN_SURFACE,self.cam,id , name,mass, color , speed, x, y)
-        self.players[id] = p
-        if self.current_player is None:
-            self.current_player = p
+        if id not in self.players:
+            self.players[id] = p
+            if self.current_player is None:
+                self.current_player = p
+        else:
+            pass
+            #Caso exista o id do jogador 
         #self.painter.add(p) #Nota: isto vai dar barraco a adicionar um jogador a meio do jogo
 
 
@@ -111,10 +115,14 @@ class agarGame :
     def update_player(self, id, x, y, mass):
         self.players[id].update(x, y, mass)
 
-    def update_game(self, game):
+    def update_game(self, msg):
+        game = msg.get_game_state()
+        if msg.get_newplayers_status() :
+            for p in msg.get_newplayers():
+                self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
         players = game['players']
-       # for player in players:
-           # self.update_player(player['id'], player['x'], player['y'], player['mass'])
+        for player in players:
+            self.update_player(player['id'], player['x'], player['y'], player['mass'])
 
     def configGame(self,p,game):
         self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])

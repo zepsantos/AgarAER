@@ -48,9 +48,14 @@ def mainMenu():
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(common.MAIN_SURFACE)
 
+
+
+#Inicia ligaçao com o server (Configuracao do jogo)
 def initConnectionToServer():
     client.initConnectionToServer(player_name, startGame)
 
+
+# Inicia a thread que vai escutar o canal do jogo e o jogo
 def startGame(config):
     logging.info('Config obtida: {}'.format(config))
     agargame = agarGame()
@@ -61,7 +66,9 @@ def startGame(config):
     listenGameThread.start()
     agargame.set_atTickIsOver(send_playerUpdateToServer)
     agargame.startGameLoop()
-
+    
+    
+#Envia reports dos jogadores para o servidor
 def send_playerUpdateToServer(player):
     p_update = {'x': player.get_x(),'y': player.get_y(), 'mass':player.get_mass()}
     msg = PlayerUpdate(p_update)

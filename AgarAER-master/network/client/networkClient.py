@@ -43,7 +43,7 @@ class NetworkClient:
         while True:
             data,addr = watch_gamechannel.listenWhile(gameChannelBool)
             msg = pickle.loads(data)
-            listener(msg.get_game_state())
+            listener(msg)
 
 
     def sendToServer(self, p_update):
