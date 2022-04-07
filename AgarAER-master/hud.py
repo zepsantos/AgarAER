@@ -11,9 +11,15 @@ class HUD(Drawable):
     """Used to represent all necessary Head-Up Display information on screen.
     """
     
-    def __init__(self, surface, camera, current_player, players):
+    def __init__(self, surface, camera):
         super().__init__(surface, camera)
-        self.current_player = current_player
+        self.current_player = None
+        self.players = None
+
+    def set_current_player(self, player):
+        self.current_player = player
+
+    def set_players(self, players):
         self.players = players
         
     def sortDic_byMass(self):
@@ -27,7 +33,8 @@ class HUD(Drawable):
         
     def draw(self):
         counter=1
-       
+        if self.current_player is None:
+           return
         w,h = font.size("Score: "+str(int(self.current_player.mass*2))+" ")
         self.surface.blit(pygame.transform.scale(SCOREBOARD_SURFACE, (w, h)),
                           (8,SCREEN_HEIGHT-30))
@@ -52,7 +59,7 @@ class HUD(Drawable):
         
         sorted_d = dict( sorted(sorted_Dict.items(), key=operator.itemgetter(1),reverse=True)) 
             
-        print(sorted_d)      
+        #print(sorted_d)
             
         counter=1
         for key in sorted_d:    

@@ -31,7 +31,6 @@ class Server:
                 events = self.poll.poll(1)
                 # For each new event, dispatch to its handler
                 for key, event in events:
-                    logging.log(logging.DEBUG, "Event: %s" % str(key))
                     if key == self.newconn_watcher.get_watch():
                         self.handle_new_connection(key,event)
                     else:
@@ -43,7 +42,20 @@ class Server:
             #self.main_socket.close()
 
     def handler(self, key, event):
-        pass
+        watcher = self.watcherDic[key]
+        data ,addr = watcher.retrieveMessage()
+        msg = pickle.loads(data)
+        logging.debug("Received player update from %s" % format(msg))
+        if msg.type == MessageType.PLAYER_UPDATE:
+            self.received_client_update(msg, addr)
+        else:
+            return
+
+
+
+    def received_client_update(self, msg, addr):
+        self.game.update_player(msg.get_sender(), msg.get_player_update())
+
 
     def handle_new_connection(self, key, event):
         data ,addr = self.newconn_watcher.retrieveMessage()
@@ -56,6 +68,7 @@ class Server:
         msgToSend = AuthenticationResponse(p.get_id(), self.createConfigForNewPlayers(p))
         finalmsg = pickle.dumps(msgToSend)
         tmpsock.sendto(finalmsg, (self.group_addr, authrequest.get_port()))
+        self.listenForClientUpdates(authrequest.get_port())
         if not self.gameStarted:
             self.initGame()
 
@@ -65,7 +78,11 @@ class Server:
         self.broadCastThread = threading.Thread(target=self.broadcastGameToGameChannel)
         self.broadCastThread.start()
 
-    #THREAD AQUI
+    def listenForClientUpdates(self,port):
+        watcher = Watcher(self.UDP_IP,port,self.group_addr)
+        self.poll.register(watcher.get_watch(), select.POLLIN)
+        self.watcherDic[watcher.get_watch()] = watcher
+
     def broadcastGameToGameChannel(self):
 
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
@@ -79,7 +96,7 @@ class Server:
 
 
     def createConfigForNewPlayers(self, p):
-        config = {'player': p.convert_to_dic(), 'game': self.game.convertGameToDic() , 'group': (self.group_addr, self.game.get_port())}
+        config = {'player': p.convert_to_dic(), 'game': self.game.convertGameToDic()}
         return config
 
 """"

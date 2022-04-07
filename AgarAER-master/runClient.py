@@ -8,7 +8,7 @@ def run():
                         format='%(asctime)s - %(levelname)s - %(filename)s:%(funcName)s - %(message)s')
     client = NetworkClient()
     client.initConnectionToServer('omaior',lambda c : print(c['player']))
-    client.listenToGameChannel(6000,lambda c : print(c))
+   #client.listenToGameChannel(6000,lambda c : print(c))
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@ class NetworkClient:
     def __init__(self) -> None:
         self.UDP_IP = "::"
         self.authGamePort = 5005
+        self.gameReportPort = None
         self.group_addr = 'ff02::5'
         self.sock = socket.socket(socket.AF_INET6, # Internet
 						socket.SOCK_DGRAM) # UDP
@@ -27,11 +28,11 @@ class NetworkClient:
 
 
     def initConnectionToServer(self,name,gameConfigListener):
-        print('initConnectionToServer')
         msg = AuthenticationRequest(None, name)
         pckmsg = pickle.dumps(msg)
         self.sock.sendto(pckmsg, (self.group_addr,self.authGamePort))
-        watch_authchannel = Watcher(self.UDP_IP, msg.get_port(),self.group_addr)
+        self.gameReportPort = msg.get_port()
+        watch_authchannel = Watcher(self.UDP_IP, self.gameReportPort,self.group_addr)
         data,addr = watch_authchannel.listenWhile(icslistenparameter)
         watch_authchannel.close()
         authresponse = pickle.loads(data)
@@ -41,7 +42,13 @@ class NetworkClient:
         watch_gamechannel = Watcher(self.UDP_IP, port ,self.group_addr)
         while True:
             data,addr = watch_gamechannel.listenWhile(gameChannelBool)
-            listener(pickle.loads(data))
+            msg = pickle.loads(data)
+            listener(msg.get_game_state())
+
+
+    def sendToServer(self, p_update):
+        pckmsg = pickle.dumps(p_update)
+        self.sock.sendto(pckmsg, (self.group_addr,self.gameReportPort))
 
 
 

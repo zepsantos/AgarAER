@@ -14,6 +14,10 @@ class Game:
         else:
             print('not implemented')
 
+
+    def update_player(self,id, p_update):
+        self.players[id].update(p_update)
+
     def start(self):
         pass
 
@@ -31,7 +35,8 @@ class Game:
 
     def convertGameToDic(self):
         game = {
-            'players' : [p.convert_to_dic() for p in self.players.values()]
+            'players' : [p.convert_to_dic() for p in self.players.values()],
+            'port' : self.get_port()
         }
         return game
 
@@ -44,7 +49,7 @@ class Game:
         temp_id = uuid.uuid4()
         while temp_id in self.players:
             temp_id = uuid.uuid4()
-        return temp_id
+        return str(temp_id)
 
     def remove_player(self):
         pass

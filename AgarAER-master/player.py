@@ -1,6 +1,4 @@
 from drawable import Drawable
-from painter import Painter
-
 import random
 import common
 import pygame
@@ -9,25 +7,17 @@ import math
 class Player(Drawable):
     """Used to represent the concept of a player.
     """
-    COLOR_LIST = [
-    (37,7,255),
-    (35,183,253),
-    (48,254,241),
-    (19,79,251),
-    (255,7,230),
-    (255,7,23),
-    (6,254,13)]
-
     FONT_COLOR = (50, 50, 50)
     
-    def __init__(self, surface,camera, id , name,mass):
+    def __init__(self, surface,camera, id , name,mass, color , speed, x, y):
         super().__init__(surface, camera)
         self.id = id
-        self.x = random.randint(100,2000)
-        self.y = random.randint(100,2000)
+        self.x = x
+        self.y = y
         self.mass = mass
-        self.speed = 3
-        self.color = col = random.choice(Player.COLOR_LIST)
+        self.speed = speed
+        self.color = col = color
+        self.onScreen = False
         self.outlineColor = (
             int(col[0]-col[0]/3),
             int(col[1]-col[1]/3),
@@ -36,6 +26,23 @@ class Player(Drawable):
         else: self.name = "Anonymous"
         self.pieces = []
 
+    def get_id(self):
+        return self.id
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
+    def get_mass(self):
+        return self.mass
+
+    def set_onScreen(self):
+        self.onScreen = True
+
+    def is_onScreen(self):
+        return self.onScreen
 
     def collisionDetection(self, edibles):
         """Detects cells being inside the radius of current player.
@@ -50,7 +57,7 @@ class Player(Drawable):
         coordEsq = (self.x) - radius  
          
         for edible in edibles:
-            if( (common.getDistance((edible.x, edible.y), (self.x,self.y)) <= self.mass/2) and (coordDir  < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima> 0) ):
+            if (common.getDistance((edible.x, edible.y), (self.x, self.y)) <= self.mass / 2) and (coordDir < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima > 0):
                 self.mass+=0.25
                 edibles.remove(edible)
 
@@ -75,8 +82,6 @@ class Player(Drawable):
             vy = -self.speed + math.fabs(vx)
         else:
             vy = self.speed - math.fabs(vx)
-        tmpX = self.x + vx
-        tmpY = self.y + vy
         
         zoom = self.camera.zoom
         radius= int(self.mass/2 + 3)
@@ -87,10 +92,7 @@ class Player(Drawable):
         coordBaixo= (self.y) + radius  
         coordDir= (self.x) + radius  
         coordEsq = (self.x) - radius
-        
-        #print('centro y ', self.y, 'coordCima ',coordCima, 'coordBaixo ', coordBaixo)
-        #print('centro x ', self.x, 'coordDir ',coordDir, 'coordEsq ', coordEsq)
-        #print('velX ', vx, 'velY ', vy)
+
         
         
         if (coordEsq > 0):
@@ -130,9 +132,6 @@ class Player(Drawable):
        
         
 
-    def withinBounds(self,pos):
-        (x,y) = pos
-        pass
     
     def removePlayer(players,player2remove):
         for  player in players:

@@ -6,7 +6,7 @@ class GameState(Message) :
         self.gameState = gameState
 
 
-    def getGameState(self) :
+    def get_game_state(self) :
         return self.gameState
 
 

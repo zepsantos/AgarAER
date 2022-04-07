@@ -19,5 +19,5 @@ class Grid(Drawable):
         
         
         for i in range(0,common.PLATFORM_WIDTH,25):
-           pg.draw.line(self.surface,  self.color, (x, i*zoom + y), (2000*zoom + x, i*zoom + y), 3)
-           pg.draw.line(self.surface, self.color, (i*zoom + x, y), (i*zoom + x, 2000*zoom + y), 3)
+           pg.draw.line(self.surface,  self.color, (x, i*zoom + y), (common.PLATFORM_WIDTH*zoom + x, i*zoom + y), 3)
+           pg.draw.line(self.surface, self.color, (i*zoom + x, y), (i*zoom + x, common.PLATFORM_HEIGHT*zoom + y), 3)

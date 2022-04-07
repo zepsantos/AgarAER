@@ -1,4 +1,5 @@
 # Auxiliary Classes
+
 class Painter:
     """Used to organize the drawing/ updating procedure.
     Implemantation based on Strategy Pattern.
@@ -11,6 +12,7 @@ class Painter:
 
     def add(self, drawable):
         self.paintings.append(drawable)
+
 
     def paint(self):
         for drawing in self.paintings:

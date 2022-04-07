@@ -9,7 +9,7 @@ class Message:
 
 
     def get_sender(self):
-        return self.sender
+        return self.senderID
 
     def set_sender(self, sender):
-        self.sender = sender
+        self.senderID = sender
