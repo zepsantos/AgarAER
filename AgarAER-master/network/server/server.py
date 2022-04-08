@@ -1,8 +1,9 @@
 import time
 from time import sleep
-
+import sys
 from .game import Game
 import threading
+from concurrent.futures import ThreadPoolExecutor
 import socket
 import dill as pickle
 import select
@@ -19,6 +20,7 @@ class Server:
         self.game = Game()
         self.poll = select.poll()
         self.watcherDic = {}
+        self.threadpool = ThreadPoolExecutor(max_workers=5)
         self.gameStarted = False
         #self.poll.register(self.main_socket.fileno(), select.POLLIN)
         #self.game_worker = Worker(self.UDP_IP,6000,self.group_addr)
@@ -36,7 +38,7 @@ class Server:
                     if key == self.newconn_watcher.get_watch():
                         self.handle_new_connection(key,event)
                     else:
-                        self.handler(key, event)
+                        self.threadpool.submit(self.handler, key, event)
         finally:
             pass
             #self.warnImGoingOffline()
@@ -56,7 +58,7 @@ class Server:
 
 
     def received_client_update(self, msg, addr):
-        self.game.update_player(msg.get_sender(), msg.get_player_update())
+        self.game.update_from_player(msg.get_sender(), msg.get_player_update())
 
 
     def handle_new_connection(self, key, event):
@@ -65,17 +67,51 @@ class Server:
         if authrequest.type != MessageType.AUTHENTICATION_REQUEST:
             return
         logging.log(logging.INFO, "New connection from %s" % str(addr))
-        tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+
         p = self.game.add_player(addr, authrequest.get_id(), authrequest.get_name())
 
-        msgToSend = AuthenticationResponse(p.get_id(), self.createConfigForNewPlayers(p))
-        finalmsg = pickle.dumps(msgToSend)
-        tmpsock.sendto(finalmsg, (self.group_addr, authrequest.get_port()))
+        self.threadpool.submit(self.sendConfig,p,authrequest.get_port())
         self.listenForClientUpdates(authrequest.get_port())
         if not self.gameStarted:
             self.initGame()
         else:
             self.game.add_to_newplayers(p, 20)
+
+
+    def sendConfig(self,p,port):
+        tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        msgToSend = AuthenticationResponse(p.get_id(), self.createConfigForNewPlayers(p))
+        finalmsg = pickle.dumps(msgToSend)
+        if len(finalmsg) > 1200:
+            res = self.createConfigInPacketSize(p,msgToSend.get_config())
+            for i in range(len(res)):
+                tmpauthpck = res[i]
+                tmpauthpck.set_last_packet_no(len(res)-1)
+                tmpauthpck.set_packet_no(i)
+                tmpauthpckpick  = pickle.dumps(tmpauthpck)
+                tmpsock.sendto(tmpauthpckpick, (self.group_addr, port))
+                sleep(0.01)
+        else:
+            tmpsock.sendto(finalmsg, (self.group_addr, port))
+
+
+
+    def createConfigInPacketSize(self,p, config):
+        tmp = []
+        fstconfig = {'player':config.get('player',{}),'game':{'players':config['game']['players'],'cells':[],'port':config['game']['port']}}
+        cellslist = config['game']['cells']
+        cellsize = sys.getsizeof(cellslist[0])
+        fstauth = AuthenticationResponse(p.get_id(), fstconfig)
+        tmp.append(fstauth)
+        while len(cellslist) > 0:
+            ncells = round(1000/cellsize)
+            cellstoadd = cellslist[:ncells]
+            cellslist = cellslist[ncells:]
+            tmconfig = {'player': {}, 'game': {'players': {}, 'cells': cellstoadd, 'port': config['game']['port']}}
+            tmpauth = AuthenticationResponse(p.get_id(), tmconfig)
+            tmp.append(tmpauth)
+        return tmp
+
 
 
     def initGame(self):

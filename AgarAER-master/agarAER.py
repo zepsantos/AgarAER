@@ -69,8 +69,9 @@ def startGame(config):
     
     
 #Envia reports dos jogadores para o servidor
-def send_playerUpdateToServer(player):
-    p_update = {'rotation':player.get_lastrotation(), 'mass':player.get_mass()}
+def send_playerUpdateToServer(player,cells):
+    p_update = {'rotation':player.get_lastrotation(), 'mass':player.get_mass(), 'cells_eaten': cells.get_eaten_cells() }
+    cells.clean_eaten_cells()
     msg = PlayerUpdate(p_update)
     msg.set_sender(player.get_id())
     client.sendToServer(msg)

@@ -34,9 +34,28 @@ class NetworkClient:
         self.gameReportPort = msg.get_port()
         watch_authchannel = Watcher(self.UDP_IP, self.gameReportPort,self.group_addr)
         data,addr = watch_authchannel.listenWhile(icslistenparameter)
-        watch_authchannel.close()
         authresponse = pickle.loads(data)
-        gameConfigListener(authresponse.get_config())
+        config = authresponse.get_config()
+        for i in range(0,authresponse.get_last_packet_no()):
+            data, addr = watch_authchannel.listenWhile(icslistenparameter)
+            authresponse = pickle.loads(data)
+            config = self.joinConfig(config,authresponse.get_config())
+        watch_authchannel.close()
+        gameConfigListener(config)
+
+
+
+
+
+    def joinConfig(self,config,sndconfig):
+
+        sndgpacket = sndconfig['game']
+        config['player'].update(sndconfig['player'])
+        config['game']['players'].extend(sndgpacket['players'])
+        config['game']['cells'].extend(sndgpacket['cells'])
+        return config
+
+
 
     def listenToGameChannel(self, port, listener):
         watch_gamechannel = Watcher(self.UDP_IP, port ,self.group_addr)

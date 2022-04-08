@@ -19,7 +19,7 @@ class agarGame :
         self.cam = Camera()
         self.clock = pygame.time.Clock()
         self.grid = Grid(common.MAIN_SURFACE, self.cam)
-        self.cells = CellList(common.MAIN_SURFACE, self.cam, 2000)
+        self.cells = None
         self.painter = Painter()
         self.atTickIsOver = None
         self.current_player = None
@@ -30,8 +30,8 @@ class agarGame :
         self.drawOnScreen()
         
     def drawOnScreen(self):
-        self.painter.add(self.grid) 
-        self.painter.add(self.cells)
+        self.painter.add(self.grid)
+        #self.painter.add(self.cells)
         self.painter.add(self.hud)
         
 
@@ -46,7 +46,7 @@ class agarGame :
 
 
         self.drawPlayers()
-
+        self.painter.add(self.cells)
         self.hud.set_current_player(self.current_player)
         self.hud.set_players(self.players)
         counter = 0
@@ -56,9 +56,8 @@ class agarGame :
             self.clock.tick(60)
             currentTime = pygame.time.get_ticks()
 
-            cell = Cell(common.MAIN_SURFACE, self.cam)
-            self.cells.add(cell)
-
+            #cell = Cell(common.MAIN_SURFACE, self.cam)
+            #self.cells.add(cell)
             playerMove = self.current_play_queue.get()
             self.current_player.update(playerMove['x'], playerMove['y'], playerMove['mass'])
 
@@ -68,10 +67,12 @@ class agarGame :
                 
             #self.current_player.feed(self.players, self.painter.paintings) rever isto
             
-            #self.current_player.collisionDetection(self.cells.list)
+            cell_eaten = self.current_player.collisionDetection(self.cells.list)
+            if cell_eaten:
+                self.cells.add_to_eaten_cells(cell_eaten)
             self.cam.update(self.current_player)
             if self.atTickIsOver is not None and currentTime - self.networkTime > 5:
-                self.atTickIsOver(self.current_player)
+                self.atTickIsOver(self.current_player,self.cells)
                 packet_out += 1
                 self.networkTime = pygame.time.get_ticks()
             common.MAIN_SURFACE.fill((242,251,255))
@@ -139,7 +140,7 @@ class agarGame :
             self.players[id].update(x, y, mass)
 
     def update_game(self, msg):
-        logging.info("Received update from server ping: {}".format(msg.get_ping()))
+        logging.debug("Received update from server ping: {}".format(msg.get_ping()))
         self.packets_in += 1
         game = msg.get_game_state()
         if msg.get_newplayers_status() :
@@ -148,6 +149,12 @@ class agarGame :
                     self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
                     self.painter.add(self.players[p['id']])
         players = game['players']
+        #cells = game.get('cells', [])
+        #self.cells.add(cells)
+        cells_eaten = game.get('cells_eaten', [])
+        for cell in cells_eaten:
+            self.cells.removeByPoint(cell)
+
         for player in players:
             self.update_player(player['id'], player['x'], player['y'], player['mass'])
             if player['id'] == self.current_player.get_id():
@@ -156,7 +163,8 @@ class agarGame :
     def configGame(self,p,game):
         self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
         players = game['players']
-        print(players)
+        cellsserverl = game['cells']
+        self.cells = CellList(common.MAIN_SURFACE, self.cam, cellsserverl,len(cellsserverl))
         for player in players:
             if player['id'] == p['id']:
                 continue

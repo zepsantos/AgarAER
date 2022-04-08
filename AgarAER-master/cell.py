@@ -19,10 +19,10 @@ class Cell(Drawable): # Semantically, this is a parent class of player
     (255,6,86),
     (147,7,255)]
     
-    def __init__(self, surface, camera):
+    def __init__(self, surface, camera,x,y):
         super().__init__(surface, camera)
-        self.x = random.randint(20,1980)
-        self.y = random.randint(20,1980)
+        self.x = x
+        self.y = y
         self.mass = 7
         self.color = random.choice(Cell.CELL_COLORS)
 
@@ -40,17 +40,39 @@ class CellList(Drawable):
     It is also keeping track of living/ dead cells.
     """
 
-    def __init__(self, surface, camera, numOfCells):
+    def __init__(self, surface, camera,cellsposition, numOfCells):
         super().__init__(surface, camera)
         self.count = numOfCells
         self.list = []
-        for i in range(self.count): self.list.append(Cell(self.surface, self.camera))
+        self.eaten_cells = []
+        for i in range(self.count):
+            (x,y) = cellsposition[i]
+            self.list.append(Cell(self.surface, self.camera,x,y))
         
     def add(self,cell):
+        if not cell: return
         self.list.append(cell)
+
+    def add_list_from_server(self,cells):
+        for x,y in cells:
+            self.list.append(Cell(self.surface, self.camera,x,y))
 
     def draw(self):
         for cell in self.list:
             cell.draw()
 
-    
+    def add_to_eaten_cells(self,cell):
+        self.eaten_cells.append((cell.x,cell.y))
+
+    def get_eaten_cells(self):
+        return self.eaten_cells
+
+    def clean_eaten_cells(self):
+        self.eaten_cells = []
+
+    def removeByPoint(self,cell):
+        x,y = cell
+        for i in range(len(self.list)):
+            if self.list[i].x == x and self.list[i].y == y:
+                self.list.pop(i)
+                break

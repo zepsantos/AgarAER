@@ -63,7 +63,8 @@ class Player(Drawable):
             if (common.getDistance((edible.x, edible.y), (self.x, self.y)) <= self.mass / 2) and (coordDir < 2000 or coordEsq > 0) and (coordBaixo < 2000 or coordCima > 0):
                 self.mass+=0.25
                 edibles.remove(edible)
-
+                return edible
+        return None
 
     def move(self):
         """Updates players current position depending on player's mouse relative position.
@@ -160,7 +161,7 @@ class Player(Drawable):
     def update(self, x, y, mass):
         self.set_x(x)
         self.set_y(y)
-        self.set_mass(mass)
+        #self.set_mass(mass)
 
     def set_x(self, x):
         self.x = x
