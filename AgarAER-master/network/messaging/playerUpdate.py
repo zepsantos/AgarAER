@@ -1,3 +1,5 @@
+import logging
+
 from .message import Message
 from .messageType import MessageType
 class PlayerUpdate(Message) :
@@ -7,6 +9,7 @@ class PlayerUpdate(Message) :
 
 
     def get_player_update(self) :
+        logging.debug('PlayerUpdate : {}'.format(self.p_update))
         return self.p_update
 
 

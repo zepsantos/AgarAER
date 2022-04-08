@@ -4,6 +4,7 @@ from cell import Cell,CellList
 from player import Player
 from hud import HUD
 from grid import Grid
+import queue
 import logging
 from drawable import Drawable
 from camera import Camera
@@ -22,6 +23,8 @@ class agarGame :
         self.painter = Painter()
         self.atTickIsOver = None
         self.current_player = None
+        self.current_play_queue = queue.Queue()
+        self.packets_in = 0
         self.networkTime = 0
         self.hud = HUD(common.MAIN_SURFACE, self.cam)
         self.drawOnScreen()
@@ -42,56 +45,74 @@ class agarGame :
         logging.info("Starting game loop")
 
 
-        for p in self.players.values():
-            if not p.is_onScreen():
-                p.set_onScreen()
-                self.painter.add(p)
+        self.drawPlayers()
 
         self.hud.set_current_player(self.current_player)
         self.hud.set_players(self.players)
+        counter = 0
+        debugtime = pygame.time.get_ticks()
+        packet_out = 0
         while  True :
+            self.clock.tick(60)
             currentTime = pygame.time.get_ticks()
+
             cell = Cell(common.MAIN_SURFACE, self.cam)
             self.cells.add(cell)
-            
+
+            playerMove = self.current_play_queue.get()
+            self.current_player.update(playerMove['x'], playerMove['y'], playerMove['mass'])
+
             self.reactToInput()
-            
+            counter += 1
             self.current_player.move()    
                 
             #self.current_player.feed(self.players, self.painter.paintings) rever isto
             
-            self.current_player.collisionDetection(self.cells.list)
+            #self.current_player.collisionDetection(self.cells.list)
             self.cam.update(self.current_player)
-            if self.atTickIsOver is not None and currentTime - self.networkTime > 200:
+            if self.atTickIsOver is not None and currentTime - self.networkTime > 5:
                 self.atTickIsOver(self.current_player)
+                packet_out += 1
                 self.networkTime = pygame.time.get_ticks()
             common.MAIN_SURFACE.fill((242,251,255))
             # Uncomment next line to get dark-theme
             #common.MAIN_SURFACE.fill((0,0,0))
             self.painter.paint()
-            self.clock.tick(70)
 
+            if currentTime - debugtime > 1000:
+                logging.info("FPS: {} , packet out {} in {}".format(counter, packet_out,self.packets_in))
+                debugtime = pygame.time.get_ticks()
+                counter = 0
+                packet_out = 0
+                self.packets_in = 0
+                self.current_play_queue.empty()
             # Start calculating next frame
             pygame.display.flip()
     
-  
-
+  ## verificar no painter se existem os players de forma a remover dps
+    def drawPlayers(self):
+        for p in self.players.values():
+            if not p.is_onScreen():
+                p.set_onScreen()
+                self.painter.add(p)
 
     def reactToInput(self):
         for e in pygame.event.get():
-                if(e.type == pygame.KEYDOWN):
-                    if(e.key == pygame.K_ESCAPE):
-                        pygame.quit()
-                        print("Quiting game!")
-                        quit()
-                    if(e.key == pygame.K_SPACE):
+            if e.type == pygame.KEYDOWN:
+                if(e.key == pygame.K_ESCAPE):
+                    pass
+                    #pygame.quit()
+                    #print("Quiting game!")
+                    #quit()
+                if(e.key == pygame.K_SPACE):
+                    pass
                         #del(self.cam)
-                        self.current_player.split()
+                        #self.current_player.split()
                     #if(e.key == pygame.K_w):
                         
-                if(e.type == pygame.QUIT):
-                    pygame.quit()
-                    quit()
+            if(e.type == pygame.QUIT):
+                pygame.quit()
+                quit()
                     
     def add_player(self,id,x,y,mass,color,speed,name):
         #tmpid = self.generateID(player)
@@ -118,6 +139,8 @@ class agarGame :
             self.players[id].update(x, y, mass)
 
     def update_game(self, msg):
+        logging.info("Received update from server ping: {}".format(msg.get_ping()))
+        self.packets_in += 1
         game = msg.get_game_state()
         if msg.get_newplayers_status() :
             for p in msg.get_newplayers():
@@ -127,6 +150,8 @@ class agarGame :
         players = game['players']
         for player in players:
             self.update_player(player['id'], player['x'], player['y'], player['mass'])
+            if player['id'] == self.current_player.get_id():
+                self.current_play_queue.put(player)
 
     def configGame(self,p,game):
         self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])

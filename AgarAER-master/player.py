@@ -17,7 +17,7 @@ class Player(Drawable):
         self.mass = mass
         self.speed = speed
         self.color = col = color
-        self.lastposmove = (x,y)
+        self.rotation = 0
         self.onScreen = False
         self.outlineColor = (
             int(col[0]-col[0]/3),
@@ -42,8 +42,7 @@ class Player(Drawable):
     def set_onScreen(self):
         self.onScreen = True
 
-    def get_lastposmov(self):
-        return self.lastposmove
+
 
     def is_onScreen(self):
         return self.onScreen
@@ -73,13 +72,13 @@ class Player(Drawable):
         dX, dY = pygame.mouse.get_pos()
         
         # Find the angle from the center of the screen to the mouse in radians [-Pi, Pi]
-        rotation = math.atan2(dY - float(common.SCREEN_HEIGHT)/2, dX - float(common.SCREEN_WIDTH)/2)
+        self.rotation = math.atan2(dY - float(common.SCREEN_HEIGHT) / 2, dX - float(common.SCREEN_WIDTH) / 2)
         # Convert radians to degrees [-180, 180]
-        rotation *= 180/math.pi
+        self.rotation *= 180 / math.pi
         # Normalize to [-1, 1]
         # First project the point from unit circle to X-axis
         # Then map resulting interval to [-1, 1]
-        normalized = (90 - math.fabs(rotation))/90
+        """  normalized = (90 - math.fabs(self.lastrotation))/90
         vx = self.speed*normalized
         vy = 0
         if rotation < 0:
@@ -134,10 +133,11 @@ class Player(Drawable):
                 self.y= 2000-radius
 
         self.lastposmove = (self.x,self.y)
-
+        """
                    
        
-        
+    def get_lastrotation(self):
+        return self.rotation
 
     
     def removePlayer(players,player2remove):

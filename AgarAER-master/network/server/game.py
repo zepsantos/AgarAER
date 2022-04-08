@@ -16,13 +16,14 @@ class Game:
 
 
     def update_player(self,id, p_update):
-        self.players[id].update(p_update)
+        if id in self.players:
+            self.players[id].update(p_update)
 
     def start(self):
         pass
 
     def get_player(self,id):
-        return self.players[id]
+        return self.players.get(id)
 
     def get_player_list(self):
         return self.players.values()

@@ -6,6 +6,7 @@ import threading
 import socket
 import dill as pickle
 import select
+import pygame
 import logging
 from ..channel import Watcher
 from ..messaging import MessageType, AuthenticationResponse , GameState
@@ -89,14 +90,15 @@ class Server:
         self.watcherDic[watcher.get_watch()] = watcher
 
     def broadcastGameToGameChannel(self):
-
+        clock = pygame.time.Clock()
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
         while True:
-            time.sleep(0.5)
+            clock.tick(60)
             msgToSendunpc = GameState(self.game.brief_convert_game_to_dic())
             msgToSendunpc.set_newplayers(self.game.get_newplayers())
             msgToSend = pickle.dumps(msgToSendunpc)
             tmpsock.sendto(msgToSend, (self.group_addr, self.game.get_port()))
+
 
 
 

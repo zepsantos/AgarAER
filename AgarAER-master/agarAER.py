@@ -70,7 +70,7 @@ def startGame(config):
     
 #Envia reports dos jogadores para o servidor
 def send_playerUpdateToServer(player):
-    p_update = {'x': player.get_x(),'y': player.get_y(), 'mass':player.get_mass()}
+    p_update = {'rotation':player.get_lastrotation(), 'mass':player.get_mass()}
     msg = PlayerUpdate(p_update)
     msg.set_sender(player.get_id())
     client.sendToServer(msg)

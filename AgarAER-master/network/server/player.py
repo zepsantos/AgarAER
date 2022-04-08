@@ -1,3 +1,5 @@
+import logging
+import math
 import random
 
 
@@ -42,6 +44,58 @@ class ServerPlayer:
         return self.watcher
 
     def update(self,p_update):
-        self.x = p_update.get('x',self.x)
-        self.y = p_update.get('y',self.y)
+        self.calculateMove(p_update['rotation'])
+        logging.debug('Player {} moved to {}'.format(self.name,(self.x,self.y)))
         self.mass = p_update.get('mass',self.mass)
+
+
+    def calculateMove(self,rotation):
+        normalized = (90 - math.fabs(rotation)) / 90
+        vx = self.speed * normalized
+        vy = 0
+        if rotation < 0:
+            vy = -self.speed + math.fabs(vx)
+        else:
+            vy = self.speed - math.fabs(vx)
+
+        radius = int(self.mass / 2 + 3)
+        # print('raio ',radius)
+
+        coordCima = (self.y) - radius
+        coordBaixo = (self.y) + radius
+        coordDir = (self.x) + radius
+        coordEsq = (self.x) - radius
+
+        if (coordEsq > 0):
+            self.x += vx
+        else:
+            if (vx > 0):
+                self.x += vx
+            else:
+                self.x = radius
+
+        if (coordDir < 2000):
+            self.x += vx
+        else:
+            if (vx < 0):
+                self.x += vx
+            else:
+                # self.x = radius
+                self.x = 2000 - radius
+
+        if (coordCima > 0):
+            self.y += vy
+        else:
+            if (vy > 0):
+                self.y += vy
+            else:
+                self.y = radius
+
+        if (coordBaixo < 2000):
+            self.y += vy
+        else:
+            if (vy < 0):
+                self.y += vy
+            else:
+                self.y = 2000 - radius
+
