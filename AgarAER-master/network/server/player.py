@@ -1,7 +1,7 @@
 import logging
 import math
 import random
-
+from .utils import generateTimestamp,getTimeStampDifMilis
 
 class ServerPlayer:
     COLOR_LIST = [
@@ -13,12 +13,16 @@ class ServerPlayer:
         (255,7,23),
         (6,254,13)]
 
-    def __init__(self,addr,id,name) -> None:
+    def __init__(self,addr,id,name,port) -> None:
         self.addr = addr
+        self.watcherport = port
         self.id = id 
         self.x = random.randint(100, 400)
         self.y = random.randint(100, 400)
         self.mass = 20
+        self.firstTimeSeen = generateTimestamp()
+        self.lastTimeSeen = self.firstTimeSeen
+        self.acceptedConfig = False
         self.color = random.choice(ServerPlayer.COLOR_LIST) #escolhe uma cor random
         self.speed = 3 
         self.name = name
@@ -44,9 +48,13 @@ class ServerPlayer:
         return self.watcher
 
     def update(self,p_update):
+        self.lastTimeSeen = generateTimestamp()
         self.calculateMove(p_update['rotation'])
         logging.debug('Player {} moved to {}'.format(self.name,(self.x,self.y)))
         self.mass = p_update.get('mass',self.mass)
+
+    def getLastTimeSeenDifMilis(self):
+        return getTimeStampDifMilis(self.lastTimeSeen)
 
 
     def calculateMove(self,rotation):
@@ -98,4 +106,15 @@ class ServerPlayer:
                 self.y += vy
             else:
                 self.y = 2000 - radius
+
+
+
+    def get_acceptconf_status(self):
+        return self.acceptedConfig
+
+    def accepted_conf(self):
+        self.acceptedConfig = True
+
+    def get_watcher_port(self):
+        return self.watcherport
 

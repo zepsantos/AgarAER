@@ -1,3 +1,5 @@
+
+
 import pygame
 import math
 # Definição de dimensões
@@ -34,3 +36,5 @@ def getDistance(a, b):
     diffX = math.fabs(a[0]-b[0])
     diffY = math.fabs(a[1]-b[1])
     return ((diffX**2)+(diffY**2))**(0.5)
+
+

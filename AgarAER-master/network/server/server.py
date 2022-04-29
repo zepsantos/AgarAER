@@ -11,11 +11,12 @@ import pygame
 import logging
 from ..channel import Watcher
 from ..messaging import MessageType, AuthenticationResponse , GameState
+
 class Server: 
     def __init__(self) -> None:
         self.broadCastThread = None
         self.UDP_IP = "::" # = 0.0.0.0 u IPv4
-        self.group_addr = 'ff02::5'
+        self.group_addr = 'ff0e::2'
         self.UDP_PORT = 5005
         self.game = Game()
         self.poll = select.poll()
@@ -27,8 +28,8 @@ class Server:
         self.newconn_watcher = Watcher(self.UDP_IP,self.UDP_PORT,self.group_addr)
 
     def start_listening(self):
-
         self.poll.register(self.newconn_watcher.get_watch(), select.POLLIN)
+        threading.Thread(target=self.checkPlayerStatus).start()
         try:
             while True:
                 sleep(0.01)
@@ -45,6 +46,17 @@ class Server:
             #self.poll.unregister(self.main_socket.fileno())
             #self.main_socket.close()
 
+    def checkPlayerStatus(self):
+        while True:
+            for p in self.game.get_player_list():
+                print('player ', p.getLastTimeSeenDifMilis())
+                if p.getLastTimeSeenDifMilis() > 1000:
+                    if not p.get_acceptconf_status():
+                        self.sendConfig(p,p.get_watcher_port())
+
+
+
+
     def handler(self, key, event):
         watcher = self.watcherDic[key]
         data ,addr = watcher.retrieveMessage()
@@ -54,7 +66,6 @@ class Server:
             self.received_client_update(msg, addr)
         else:
             return
-
 
 
     def received_client_update(self, msg, addr):
@@ -68,8 +79,7 @@ class Server:
             return
         logging.log(logging.INFO, "New connection from %s" % str(addr))
 
-        p = self.game.add_player(addr, authrequest.get_id(), authrequest.get_name())
-
+        p = self.game.add_player(addr, authrequest.get_id(), authrequest.get_name(),authrequest.get_port())
         self.threadpool.submit(self.sendConfig,p,authrequest.get_port())
         self.listenForClientUpdates(authrequest.get_port())
         if not self.gameStarted:
@@ -88,7 +98,7 @@ class Server:
                 tmpauthpck = res[i]
                 tmpauthpck.set_last_packet_no(len(res)-1)
                 tmpauthpck.set_packet_no(i)
-                tmpauthpckpick  = pickle.dumps(tmpauthpck)
+                tmpauthpckpick = pickle.dumps(tmpauthpck)
                 tmpsock.sendto(tmpauthpckpick, (self.group_addr, port))
                 sleep(0.01)
         else:
@@ -116,7 +126,6 @@ class Server:
 
     def initGame(self):
         self.gameStarted = True
-        self.game.start()
         self.broadCastThread = threading.Thread(target=self.broadcastGameToGameChannel)
         self.broadCastThread.start()
 

@@ -8,10 +8,10 @@ class Game:
         self.port = 6000
         self.newplayers = []
 
-    def add_player(self,addr,id,name):
+    def add_player(self,addr,id,name,port):
         if id is None:
             temp_id = self.generate_id()
-            p = ServerPlayer(addr,temp_id,name)
+            p = ServerPlayer(addr,temp_id,name,port)
             self.players[temp_id] = p
             return p
         else:
@@ -26,8 +26,6 @@ class Game:
                 self.cells.add_to_cells_eaten(c)
                 self.cells.removeByPoint(c)
 
-    def start(self):
-        pass
 
     def get_player(self,id):
         return self.players.get(id)

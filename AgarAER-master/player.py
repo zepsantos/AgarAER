@@ -1,8 +1,8 @@
 from drawable import Drawable
 import random
-import common
 import pygame
 import math
+import common
 
 class Player(Drawable):
     """Used to represent the concept of a player.
@@ -18,6 +18,7 @@ class Player(Drawable):
         self.speed = speed
         self.color = col = color
         self.rotation = 0
+
         self.onScreen = False
         self.outlineColor = (
             int(col[0]-col[0]/3),
@@ -159,6 +160,7 @@ class Player(Drawable):
                 break
 
     def update(self, x, y, mass):
+        self.acceptedConfig = True
         self.set_x(x)
         self.set_y(y)
         #self.set_mass(mass)

@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/agarGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/agarGame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/cell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/drawable.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/drawable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/hud.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/hud.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AgarAER-master/network/server/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/server/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/server/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/server/common.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/server/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/server/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/server/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/server/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/server/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/server/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/player.py" afterDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
@@ -24,6 +30,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -38,7 +52,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/AgarAER-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
@@ -117,6 +131,8 @@
       <workItem from="1649027551418" duration="2377000" />
       <workItem from="1649036331170" duration="35739000" />
       <workItem from="1649181206608" duration="4989000" />
+      <workItem from="1651207878863" duration="83000" />
+      <workItem from="1651207970445" duration="3574000" />
     </task>
     <servers />
   </component>

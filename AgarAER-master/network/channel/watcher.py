@@ -16,9 +16,9 @@ class Watcher:
     def config_socketMTC(self):
         interface_index = socket.if_nametoindex("eth0")
 
-        #self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 1)
+        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 10)
         #self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
-        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 1)
+        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 10)
         mc_addr = ipaddress.IPv6Address(self.group_addr)
         join_data = struct.pack('16sI', mc_addr.packed, interface_index)
         self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, join_data)

@@ -20,10 +20,12 @@ class NetworkClient:
         self.UDP_IP = "::"
         self.authGamePort = 5005
         self.gameReportPort = None
-        self.group_addr = 'ff02::5'
+        self.group_addr = 'ff0e::2'
         self.sock = socket.socket(socket.AF_INET6, # Internet
 						socket.SOCK_DGRAM) # UDP
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS ,10)
+        self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL ,10)
         #self.sock.settimeout(0.2)
 
 
