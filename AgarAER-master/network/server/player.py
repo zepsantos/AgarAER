@@ -48,6 +48,8 @@ class ServerPlayer:
         return self.watcher
 
     def update(self,p_update):
+        if  not self.accepted_conf:
+            self.accepted_conf = True
         self.lastTimeSeen = generateTimestamp()
         self.calculateMove(p_update['rotation'])
         logging.debug('Player {} moved to {}'.format(self.name,(self.x,self.y)))

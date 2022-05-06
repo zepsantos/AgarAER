@@ -29,7 +29,7 @@ class Server:
 
     def start_listening(self):
         self.poll.register(self.newconn_watcher.get_watch(), select.POLLIN)
-        threading.Thread(target=self.checkPlayerStatus).start()
+        #threading.Thread(target=self.checkPlayerStatus).start()
         try:
             while True:
                 sleep(0.01)
@@ -49,7 +49,7 @@ class Server:
     def checkPlayerStatus(self):
         while True:
             for p in self.game.get_player_list():
-                print('player ', p.getLastTimeSeenDifMilis())
+                #print('player ', p.getLastTimeSeenDifMilis())
                 if p.getLastTimeSeenDifMilis() > 1000:
                     if not p.get_acceptconf_status():
                         self.sendConfig(p,p.get_watcher_port())
@@ -89,7 +89,12 @@ class Server:
 
 
     def sendConfig(self,p,port):
+       # while not p.get_acceptconf_status():
+        sleep(1)
+        #print('im here')
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS ,64)
+        tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL ,64)
         msgToSend = AuthenticationResponse(p.get_id(), self.createConfigForNewPlayers(p))
         finalmsg = pickle.dumps(msgToSend)
         if len(finalmsg) > 1200:
@@ -137,6 +142,8 @@ class Server:
     def broadcastGameToGameChannel(self):
         clock = pygame.time.Clock()
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS ,64)
+        tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL ,64)
         while True:
             clock.tick(60)
             msgToSendunpc = GameState(self.game.brief_convert_game_to_dic())
