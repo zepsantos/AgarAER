@@ -29,7 +29,7 @@ class Server:
 
     def start_listening(self):
         self.poll.register(self.newconn_watcher.get_watch(), select.POLLIN)
-        #threading.Thread(target=self.checkPlayerStatus).start()
+        threading.Thread(target=self.checkPlayerStatus).start()
         try:
             while True:
                 sleep(0.01)
@@ -48,7 +48,8 @@ class Server:
 
     def checkPlayerStatus(self):
         while True:
-            for p in self.game.get_player_list():
+            dic = list(self.game.get_player_list())
+            for p in dic:
                 #print('player ', p.getLastTimeSeenDifMilis())
                 if p.getLastTimeSeenDifMilis() > 1000:
                     if not p.get_acceptconf_status():
@@ -113,7 +114,10 @@ class Server:
 
     def createConfigInPacketSize(self,p, config):
         tmp = []
-        fstconfig = {'player':config.get('player',{}),'game':{'players':config['game']['players'],'cells':[],'port':config['game']['port']}}
+        players_list = config['game']['players']
+        if players_list is None:
+            players_list = []
+        fstconfig = {'player':config.get('player',{}),'game':{'players':players_list,'cells':[],'port':config['game']['port']}}
         cellslist = config['game']['cells']
         cellsize = sys.getsizeof(cellslist[0])
         fstauth = AuthenticationResponse(p.get_id(), fstconfig)
@@ -144,12 +148,21 @@ class Server:
         tmpsock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
         tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS ,64)
         tmpsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL ,64)
+        debugtime = pygame.time.get_ticks()
+        packet_out = 0
         while True:
             clock.tick(60)
+            currentTime = pygame.time.get_ticks()
+            if currentTime - debugtime > 1000:
+                #logging.info("packet out {} ".format(packet_out))
+                debugtime = pygame.time.get_ticks()
+                
+                packet_out = 0
             msgToSendunpc = GameState(self.game.brief_convert_game_to_dic())
             msgToSendunpc.set_newplayers(self.game.get_newplayers())
             msgToSend = pickle.dumps(msgToSendunpc)
             tmpsock.sendto(msgToSend, (self.group_addr, self.game.get_port()))
+            packet_out +=1
 
 
 

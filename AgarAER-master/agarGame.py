@@ -53,12 +53,13 @@ class agarGame :
         debugtime = pygame.time.get_ticks()
         packet_out = 0
         while  True :
-            self.clock.tick(60)
+            #self.clock.tick(60)
             currentTime = pygame.time.get_ticks()
 
             #cell = Cell(common.MAIN_SURFACE, self.cam)
             #self.cells.add(cell)
             playerMove = self.current_play_queue.get()
+            #print('playerMove: ' ,playerMove['x'], playerMove['y'], playerMove['mass'])
             self.current_player.update(playerMove['x'], playerMove['y'], playerMove['mass'])
 
             self.reactToInput()
@@ -71,7 +72,7 @@ class agarGame :
             if cell_eaten:
                 self.cells.add_to_eaten_cells(cell_eaten)
             self.cam.update(self.current_player)
-            if self.atTickIsOver is not None and currentTime - self.networkTime > 5:
+            if self.atTickIsOver is not None: #and currentTime - self.networkTime > 0:
                 self.atTickIsOver(self.current_player,self.cells)
                 packet_out += 1
                 self.networkTime = pygame.time.get_ticks()
@@ -86,10 +87,13 @@ class agarGame :
                 counter = 0
                 packet_out = 0
                 self.packets_in = 0
-                self.current_play_queue.empty()
+                #self.clearPlaysQueue()
             # Start calculating next frame
             pygame.display.flip()
     
+    def clearPlaysQueue(self):
+        while not self.current_play_queue.empty():
+            self.current_play_queue.get_nowait()
   ## verificar no painter se existem os players de forma a remover dps
     def drawPlayers(self):
         for p in self.players.values():
@@ -125,7 +129,7 @@ class agarGame :
         else:
             pass
             #Caso exista o id do jogador 
-        #self.painter.add(p) #Nota: isto vai dar barraco a adicionar um jogador a meio do jogo
+    
 
 
     def set_currentPlayer(self, player):
@@ -158,7 +162,7 @@ class agarGame :
         for player in players:
             self.update_player(player['id'], player['x'], player['y'], player['mass'])
             if player['id'] == self.current_player.get_id():
-                self.current_play_queue.put(player)
+                self.current_play_queue.put_nowait(player)
 
     def configGame(self,p,game):
         self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])

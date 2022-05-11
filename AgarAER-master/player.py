@@ -77,13 +77,14 @@ class Player(Drawable):
         self.rotation = math.atan2(dY - float(common.SCREEN_HEIGHT) / 2, dX - float(common.SCREEN_WIDTH) / 2)
         # Convert radians to degrees [-180, 180]
         self.rotation *= 180 / math.pi
+        """
         # Normalize to [-1, 1]
         # First project the point from unit circle to X-axis
         # Then map resulting interval to [-1, 1]
-        """  normalized = (90 - math.fabs(self.lastrotation))/90
+        normalized = (90 - math.fabs(self.rotation))/90
         vx = self.speed*normalized
         vy = 0
-        if rotation < 0:
+        if self.rotation < 0:
             vy = -self.speed + math.fabs(vx)
         else:
             vy = self.speed - math.fabs(vx)
