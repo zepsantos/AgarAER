@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/deadCertificate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/scapytest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/repeatTimer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" afterDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -154,6 +151,10 @@
       <workItem from="1652581319900" duration="20500000" />
       <workItem from="1652853166118" duration="315000" />
       <workItem from="1652990416735" duration="2406000" />
+      <workItem from="1653448866309" duration="739000" />
+      <workItem from="1653454634043" duration="596000" />
+      <workItem from="1653801305532" duration="2804000" />
+      <workItem from="1653927677544" duration="1738000" />
     </task>
     <servers />
   </component>

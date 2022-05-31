@@ -27,5 +27,5 @@ class Peer:
             neighb.alive()
         self.neighbors[addr] = Neighbor(addr)
 
-    def getNeighborsIPList(self):
+    def getNeighborsIPView(self):
         return self.neighbors.keys()
