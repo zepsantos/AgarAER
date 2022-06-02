@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/repeatTimer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -154,8 +153,18 @@
       <workItem from="1653448866309" duration="739000" />
       <workItem from="1653454634043" duration="596000" />
       <workItem from="1653801305532" duration="2804000" />
-      <workItem from="1653927677544" duration="1738000" />
+      <workItem from="1653927677544" duration="1756000" />
+      <workItem from="1654025068054" duration="1204000" />
+      <workItem from="1654079171338" duration="4567000" />
     </task>
+    <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
+      <created>1654021934601</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1654021934601</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

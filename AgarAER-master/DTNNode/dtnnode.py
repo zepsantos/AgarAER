@@ -2,6 +2,7 @@ from peer import Peer
 from multicastSniffer import multicastSniffer
 from discovery import Discovery
 from repeatTimer import RepeatTimer
+from storeService import StoreService
 class DTNNode:
     def __init__(self):
         self.peer = Peer()
@@ -9,7 +10,7 @@ class DTNNode:
         self.mc = multicastSniffer('eth0')
         self.multicastTable = {}
         self.neighbors_peers_view = self.peer.getNeighborsIPView()
-
+        self.storeService = StoreService()
     def start(self):
         self.mc.sniffPackets(self.onPacketReceived)
         self.startNode()
