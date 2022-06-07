@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
+    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="StoreService começado">
+      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwarderPredictor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighborStat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/scapytest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
@@ -12,6 +19,10 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DarkyenusTimeTracker">
+    <option name="totalTimeSeconds" value="7930" />
+    <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -42,7 +53,8 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -155,7 +167,15 @@
       <workItem from="1653801305532" duration="2804000" />
       <workItem from="1653927677544" duration="1756000" />
       <workItem from="1654025068054" duration="1204000" />
-      <workItem from="1654079171338" duration="4567000" />
+      <workItem from="1654079171338" duration="4590000" />
+      <workItem from="1654306015338" duration="1834000" />
+      <workItem from="1654340094493" duration="7334000" />
+      <workItem from="1654443027347" duration="1885000" />
+      <workItem from="1654446852825" duration="594000" />
+      <workItem from="1654474632386" duration="1673000" />
+      <workItem from="1654523066233" duration="1779000" />
+      <workItem from="1654530768453" duration="1372000" />
+      <workItem from="1654540166285" duration="9157000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>
@@ -164,7 +184,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654021934601</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="StoreService começado">
+      <created>1654132305025</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1654132305025</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,7 +210,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados ." />
-    <option name="LAST_COMMIT_MESSAGE" value="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados ." />
+    <MESSAGE value="StoreService começado" />
+    <option name="LAST_COMMIT_MESSAGE" value="StoreService começado" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
