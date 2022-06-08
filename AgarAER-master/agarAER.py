@@ -57,6 +57,9 @@ def initConnectionToServer():
 
 # Inicia a thread que vai escutar o canal do jogo e o jogo
 def startGame(config):
+    if config == {}:
+        client.initConnectionToServer(player_name,startGame)
+        return
     logging.info('Config obtida: {}'.format(config))
     agargame = agarGame()
     p = config['player']

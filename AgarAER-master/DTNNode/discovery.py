@@ -22,7 +22,6 @@ class Discovery:
         self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 5)
         self.sock.bind(("::", self.discoveryPort))
         self.config_socketMTC()
-        threading.Thread(target=self.announcePeer).start()
         threading.Thread(target=self.discoverPeers).start()
         self.newPeerListener = newPeerListener
 
@@ -41,12 +40,15 @@ class Discovery:
         # self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_TCLASS, 0)
         # self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_RECVTCLASS, 1)
 
-    def announcePeer(self):
-        timeToSleep = uniform(0.47,0.53)
+    def announcePeer(self,isOverlay):
+        msg = HelloMessage()
+        msgpickled = dill.dumps(msg)
+        threading.Thread(target=self.startThreadToAnnouncePeer(),args=(msgpickled,)).start()
+
+    def startThreadToAnnouncePeer(self,msgpickled):
+        timeToSleep = uniform(0.47, 0.53)
         while True:
-            msg = HelloMessage()
-            hpickled = dill.dumps(msg)
-            self.sock.sendto(hpickled, (self.group_addr, self.discoveryPort))
+            self.sock.sendto(msgpickled, (self.group_addr, self.discoveryPort))
             time.sleep(timeToSleep)
 
     def discoverPeers(self):

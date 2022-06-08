@@ -9,11 +9,13 @@ class DTNNode:
         self.ip = "2001:9::2"
         self.discoveryService = Discovery(self.peer.newPeer)
         self.mc = multicastSniffer('eth0')
+        self.isOverlay = False
         self.multicastTable = {}
         self.neighbors_peers_view = self.peer.getNeighborsIPView()
         self.storeService = StoreService()
 
     def start(self):
+        self.discoveryService.announcePeer(self.isOverlay)
         self.mc.sniffPackets(self.onPacketReceived)
         self.startNode()
 

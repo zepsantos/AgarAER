@@ -2,17 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="StoreService começado">
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwarderPredictor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighborStat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/helloMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/helloMessage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/scapytest.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/agarAER.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/agarAER.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" afterDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="7930" />
+    <option name="totalTimeSeconds" value="10544" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -176,6 +173,8 @@
       <workItem from="1654523066233" duration="1779000" />
       <workItem from="1654530768453" duration="1372000" />
       <workItem from="1654540166285" duration="9157000" />
+      <workItem from="1654609357663" duration="6325000" />
+      <workItem from="1654631386483" duration="1268000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>

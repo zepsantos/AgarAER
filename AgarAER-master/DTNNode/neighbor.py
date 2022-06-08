@@ -10,6 +10,7 @@ class Neighbor:
     def __init__(self, ip):
         self.ip = ip
         self.stats = NeighborStat(self.ip)
+        self.isOverlay = False
         self.connected = False
         self.checkAliveDaemon = RepeatTimer(1, self.checkAlive)
         self.checkAliveDaemon.daemon = True
@@ -41,3 +42,6 @@ class Neighbor:
         ct = datetime.datetime.now()
         ts = ct.timestamp()
         return ts
+
+    def set_isOverlay(self):
+        self.isOverlay = True
