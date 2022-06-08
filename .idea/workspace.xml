@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="StoreService começado">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/helloMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/helloMessage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/agarAER.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/agarAER.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/channel/watcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/network/client/networkClient.py" afterDir="false" />
-    </list>
+    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +165,7 @@
       <workItem from="1654530768453" duration="1372000" />
       <workItem from="1654540166285" duration="9157000" />
       <workItem from="1654609357663" duration="6325000" />
-      <workItem from="1654631386483" duration="1268000" />
+      <workItem from="1654631386483" duration="1645000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>
@@ -190,7 +181,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654132305025</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="core topo em xml">
+      <created>1654652348892</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1654652348892</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,7 +208,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados ." />
     <MESSAGE value="StoreService começado" />
-    <option name="LAST_COMMIT_MESSAGE" value="StoreService começado" />
+    <MESSAGE value="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
+    <option name="LAST_COMMIT_MESSAGE" value="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
