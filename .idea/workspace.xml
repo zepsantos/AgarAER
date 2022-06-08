@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
+    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="core topo em xml">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/pimdconf/pimworkinginthiscomplexNetworkWithVanet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/pimdconf/pimworkinginthiscomplexNetworkWithVanet.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/runClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/runClient.py" afterDir="false" />
+    </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="10544" />
+    <option name="totalTimeSeconds" value="12202" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -165,7 +174,7 @@
       <workItem from="1654530768453" duration="1372000" />
       <workItem from="1654540166285" duration="9157000" />
       <workItem from="1654609357663" duration="6325000" />
-      <workItem from="1654631386483" duration="1645000" />
+      <workItem from="1654631386483" duration="4096000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>
@@ -188,7 +197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654652348892</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="core topo em xml">
+      <created>1654652690083</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1654652690083</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,20 +225,29 @@
     <MESSAGE value="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados ." />
     <MESSAGE value="StoreService começado" />
     <MESSAGE value="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
-    <option name="LAST_COMMIT_MESSAGE" value="core topo em xml , agarclient a enviar varias vezes pedidos para jogar caso não obtenha resposta do server.(Nao testado)" />
+    <MESSAGE value="core topo em xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="core topo em xml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/AgarAER-master/DTNNode/discovery.py</url>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/AgarAER$dtnnode.coverage" NAME="dtnnode Coverage Results" MODIFIED="1652661417426" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AgarAER-master/DTNNode" />
+    <SUITE FILE_PATH="coverage/AgarAER$dtnnode.coverage" NAME="dtnnode Coverage Results" MODIFIED="1654653282203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AgarAER-master/DTNNode" />
     <SUITE FILE_PATH="coverage/AgarAER$server__1_.coverage" NAME="server (1) Coverage Results" MODIFIED="1649103737515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AgarAER-master/network/server" />
     <SUITE FILE_PATH="coverage/AgarAER$networkClient__1_.coverage" NAME="networkClient (1) Coverage Results" MODIFIED="1649113081521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AgarAER-master/network/client" />
     <SUITE FILE_PATH="coverage/AgarAER$runServer.coverage" NAME="runServer Coverage Results" MODIFIED="1649184678601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AgarAER-master" />

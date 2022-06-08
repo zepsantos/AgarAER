@@ -3,21 +3,30 @@ from multicastSniffer import multicastSniffer
 from discovery import Discovery
 from repeatTimer import RepeatTimer
 from storeService import StoreService
+from helloMessage import HelloMessage
+
 class DTNNode:
-    def __init__(self):
+    def __init__(self,isOverlayNode):
         self.peer = Peer()
         self.ip = "2001:9::2"
         self.discoveryService = Discovery(self.peer.newPeer)
         self.mc = multicastSniffer('eth0')
-        self.isOverlay = False
+        self.isOverlayNode = isOverlayNode
         self.multicastTable = {}
         self.neighbors_peers_view = self.peer.getNeighborsIPView()
         self.storeService = StoreService()
 
     def start(self):
-        self.discoveryService.announcePeer(self.isOverlay)
+        hellomessage = self.buildHelloMessage()
+        self.discoveryService.announcePeer(hellomessage)
         self.mc.sniffPackets(self.onPacketReceived)
         self.startNode()
+
+
+    def buildHelloMessage(self):
+        hellomessage = HelloMessage()
+        hellomessage.set_isOverlay(self.isOverlayNode)
+        return hellomessage
 
     def updateMulticastWatchAddr(self):
         peersset = set(self.neighbors_peers_view)
@@ -51,4 +60,4 @@ class DTNNode:
 
 
 if __name__ == '__main__':
-    DTNNode().start()
+    DTNNode(True).start()

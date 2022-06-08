@@ -20,16 +20,20 @@ class StoreService:
         if icmp1.type == icmp6.MLD_LISTENER_QUERY:
             return
         elif icmp1.type == icmp6.MLD_LISTENER_REPORT:
-            self.requestingData.add(ip1)
+            self.requestingData.add(ip1.src_s)
+            print('icmp1 body_bytes: ' ,icmp1.body_bytes)
             return
         elif icmp1.type == icmp6.MLD_LISTENER_DONE:
-            self.requestingData.remove(ip1)
+            self.requestingData.remove(ip1.src_s)
             return
 
 
     #https://kbandla.github.io/dpkt/creating_parsers.html
     def handleMCPacket(self, ip1, udp2):
+        if udp2.dport == 19230: ## PORTA DO SERVIÇO DE DISCOVERY
+            return
         print(udp2.dport)
+
 
     def parsePacket(self, packet):
         eth = ethernet.Ethernet(packet)

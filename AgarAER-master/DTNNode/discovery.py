@@ -6,7 +6,7 @@ import ipaddress
 import struct
 import netifaces as ni
 from random import uniform
-from helloMessage import HelloMessage
+
 
 
 class Discovery:
@@ -40,10 +40,9 @@ class Discovery:
         # self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_TCLASS, 0)
         # self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_RECVTCLASS, 1)
 
-    def announcePeer(self,isOverlay):
-        msg = HelloMessage()
+    def announcePeer(self,msg):
         msgpickled = dill.dumps(msg)
-        threading.Thread(target=self.startThreadToAnnouncePeer(),args=(msgpickled,)).start()
+        threading.Thread(target=self.startThreadToAnnouncePeer,args=(msgpickled,)).start()
 
     def startThreadToAnnouncePeer(self,msgpickled):
         timeToSleep = uniform(0.47, 0.53)

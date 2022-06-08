@@ -11,11 +11,11 @@ class Shelve:
     def __init__(self, group_addr):
         self.group_addr = group_addr
         self.cachedPackets = queue.Queue()
-        self.cleanThread = RepeatTimer(1,self.clean)
-        self.cleanThread.daemon = True
-        self.cleanThread.start()
+        #self.cleanThread = RepeatTimer(1,self.clean)
+        #self.cleanThread.daemon = True
+        #self.cleanThread.start()
 
-    def addPacket(self, packet):
+    def addPacket(self, packet,port):
         self.cachedPackets.put(packet)
 
     def clean(self):

@@ -43,5 +43,5 @@ class Neighbor:
         ts = ct.timestamp()
         return ts
 
-    def set_isOverlay(self):
-        self.isOverlay = True
+    def set_isOverlay(self,isOverlayNode):
+        self.isOverlay = isOverlayNode

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <scenario name="/home/core/a/pimdconf/pimworkinginthiscomplexNetworkWithVanet.xml">
   <networks>
-    <network id="9" name="wlan9" model="basic_range" type="WIRELESS_LAN">
+    <network id="9" name="wlan9" type="WIRELESS_LAN">
       <position x="55" y="60" lat="47.57862131758314" lon="-122.1315808898906" alt="2.0"/>
     </network>
   </networks>
@@ -96,13 +96,13 @@
   </devices>
   <links>
     <link node1="9" node2="6">
-      <iface2 id="2" name="eth2" mac="00:00:00:aa:00:12" ip4="10.0.0.1" ip4_mask="32" ip6="2001:9::1" ip6_mask="128"/>
+      <iface2 id="2" name="eth2" mac="00:00:00:aa:00:12" ip6="2001:9::1" ip6_mask="128"/>
     </link>
     <link node1="9" node2="12">
-      <iface2 id="0" name="eth0" mac="00:00:00:aa:00:13" ip4="10.0.0.2" ip4_mask="32" ip6="2001:9::2" ip6_mask="128"/>
+      <iface2 id="0" name="eth0" mac="00:00:00:aa:00:13" ip6="2001:9::2" ip6_mask="128"/>
     </link>
     <link node1="9" node2="11">
-      <iface2 id="0" name="eth0" mac="00:00:00:aa:00:14" ip4="10.0.0.3" ip4_mask="32" ip6="2001:9::3" ip6_mask="128"/>
+      <iface2 id="0" name="eth0" mac="00:00:00:aa:00:14" ip6="2001:9::3" ip6_mask="128"/>
     </link>
     <link node1="9" node2="7">
       <iface2 id="2" name="eth2" mac="00:00:00:aa:00:15" ip6="2001:9::4" ip6_mask="128"/>
