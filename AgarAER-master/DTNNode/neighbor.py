@@ -11,6 +11,7 @@ class Neighbor:
         self.ip = ip
         self.stats = NeighborStat(self.ip,self.isOverlay)
         self.isOverlay = False
+        self.sniff = False
         self.connected = False
         self.checkAliveDaemon = RepeatTimer(1, self.checkAlive)
         self.checkAliveDaemon.daemon = True
@@ -33,6 +34,7 @@ class Neighbor:
     def checkAlive(self):
         logging.debug('CheckAliveNeighb Thread a correr')
         if not self.isAlive():
+            self.sniff = False
             logging.debug('CheckAliveNeighb Thread a parar de correr')
             self.checkAliveDaemon.cancel()
         else:
@@ -56,3 +58,6 @@ class Neighbor:
 
     def get_overlay_stats(self):
         return self.stats.get_average_delay_overlay()
+
+    def set_sniff(self,boolean):
+        self.sniff = boolean

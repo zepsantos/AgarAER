@@ -60,3 +60,11 @@ class Peer:
             if neigh.isOverlay():
                 lst.append(neigh)
         return lst
+
+
+    def get_neighborsaddr_to_sniff(self):
+        tmp = set()
+        for n in self.neighbors:
+            if n.sniff:
+                tmp.add(n.ip)
+        return tmp

@@ -1,3 +1,5 @@
+import dill
+
 from discovery import Discovery
 from forwardService import ForwardService
 from helloMessage import HelloMessage
@@ -5,26 +7,25 @@ from multicastSniffer import multicastSniffer
 from peer import Peer
 from repeatTimer import RepeatTimer
 from storeService import StoreService
+from message import MessageTypes
 
 
 class DTNNode:
-    def __init__(self,isOverlayNode):
+    def __init__(self, isOverlayNode):
         self.peer = Peer()
         self.ip = "2001:9::2"
         self.discoveryService = Discovery(self.peer.newPeer)
         self.mc = multicastSniffer('eth0')
         self.isOverlayNode = isOverlayNode
         self.multicastTable = {}
-        self.neighbors_peers_view = self.peer.getNeighborsIPView()
         self.storeService = StoreService()
-        self.forwardService = ForwardService(self.peer,self.storeService)
+        self.forwardService = ForwardService(self.peer, self.storeService)
 
     def start(self):
         hellomessage = self.buildHelloMessage()
         self.discoveryService.announcePeer(hellomessage)
         self.mc.sniffPackets(self.onPacketReceived)
         self.startNode()
-
 
     def buildHelloMessage(self):
         hellomessage = HelloMessage()
@@ -33,15 +34,15 @@ class DTNNode:
         min = 10000
         stat = None
         for ovneigh in overlayneighlist:
-            (delay,timestamp) = ovneigh.get_overlay_stats()
+            (delay, timestamp) = ovneigh.get_overlay_stats()
             if delay < min:
                 min = delay
-                stat = (delay,timestamp)
+                stat = (delay, timestamp)
         hellomessage.set_overlayStats(stat)
         return hellomessage
 
-    def updateMulticastWatchAddr(self):
-        peersset = set(self.neighbors_peers_view)
+    def updateMulticastWatchAddr(self): #TESTAR IsTO
+        peersset = self.peer.get_neighborsaddr_to_sniff()
         address_set = self.mc.watchAddresses()
         if len(peersset) == 0:
             self.mc.sniffAddress(self.ip)
@@ -49,7 +50,7 @@ class DTNNode:
         toRemoveSet = address_set.difference(peersset)
         tmpAddressSet = address_set.difference(toRemoveSet)
         toAddSet = tmpAddressSet.add(peersset)
-        if len(toAddSet) == 0 : # Falta aqui a condição do forwardService
+        if len(toAddSet) == 0:  # Falta aqui a condição do forwardService
             toAddSet.add(self.ip)
 
         for addr in toRemoveSet:
@@ -61,17 +62,31 @@ class DTNNode:
         timer = RepeatTimer(1, self.updateMulticastWatchAddr)
         timer.daemon = True
         timer.start()
-        self.peer.listenPeerMessages(self.onPeerMessageReceived) ## CUIDADO COM O FIO DE EXECUÇÃO , talvez usar uma queue para passar os dados
+        self.peer.listenPeerMessages(self.onPeerMessageReceived)  ## CUIDADO COM O FIO DE EXECUÇÃO , talvez usar uma queue para passar os dados
 
+    def onPeerMessageReceived(self, message, addr):
+        handler_peerMessage = {MessageTypes.FORWARD_MESSAGE: self.handleForwardMessage,
+                               MessageTypes.DTN_MESSAGE: self.handleDTNPacket,
+                               MessageTypes.DEAD_CERTIFICATE: self.handleDeadCertificateMessage}
+        unpck_msg = dill.loads(message)
+        handler = handler_peerMessage.get(unpck_msg.get_type(), None)
+        if handler:
+            handler(unpck_msg,addr)
 
-    def onPeerMessageReceived(self,message,addr):
+    def handleForwardMessage(self, message, addr):
+        if message.toSniff():
+            self.peer.neighbors[addr].set_sniff(True)
+        return
+
+    def handleDTNPacket(self, message, addr):
         pass
 
+    def handleDeadCertificateMessage(self, message, addr):
+        pass
 
     ## PACOTE RECEBIDO PELO SNIFFER
-    def onPacketReceived(self,packet):
+    def onPacketReceived(self, packet):
         self.storeService.receivePacket(packet)
-
 
 
 if __name__ == '__main__':

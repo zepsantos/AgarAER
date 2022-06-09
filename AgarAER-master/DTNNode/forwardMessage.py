@@ -11,3 +11,5 @@ class Forward_Message(Message):
     def set_sniff(self,toSniff):
         self.sniff = toSniff
 
+    def toSniff(self):
+        return self.sniff
