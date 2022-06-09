@@ -1,5 +1,5 @@
-from message import MessageTypes
 from message import Message
+from message import MessageTypes
 
 
 class DeadCertificate(Message):

@@ -13,7 +13,12 @@ class PacketReport():
     def get_port(self):
         return self.port
 
+
+
     def generate_timestamp(self):
         ct = datetime.datetime.now()
         ts = ct.timestamp()
         return ts
+
+    def get_digest(self):
+        return self.packet_digest

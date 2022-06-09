@@ -1,12 +1,12 @@
+import ipaddress
 import socket
+import struct
 import threading
 import time
-import dill
-import ipaddress
-import struct
-import netifaces as ni
 from random import uniform
 
+import dill
+import netifaces as ni
 
 
 class Discovery:

@@ -1,9 +1,11 @@
-from pypacker.layer3 import ip6, icmp6
-from pypacker.layer12 import ethernet
-from pypacker.layer4 import udp
-from shelve import Shelve
-from packetReport import PacketReport
 import xxhash
+from pypacker.layer12 import ethernet
+from pypacker.layer3 import ip6, icmp6
+from pypacker.layer4 import udp
+
+from packetReport import PacketReport
+from shelve import Shelve
+
 
 class StoreService:
     """

@@ -1,9 +1,8 @@
 import socket
 import threading
 
-from pypacker.layer3 import ip6, icmp6
 from pypacker.layer12 import ethernet
-from pypacker.layer4 import udp
+from pypacker.layer3 import ip6, icmp6
 
 
 class multicastSniffer:

@@ -1,11 +1,10 @@
-import threading
-import uuid
 import socket
+import threading
 
 import dill
+
 from message import MessageTypes
 from neighbor import Neighbor
-from discovery import Discovery
 
 
 class Peer:
