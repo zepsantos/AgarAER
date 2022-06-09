@@ -1,7 +1,9 @@
 from pypacker.layer3 import ip6, icmp6
 from pypacker.layer12 import ethernet
 from pypacker.layer4 import udp
-
+from shelve import Shelve
+from packetReport import PacketReport
+import xxhash
 
 class StoreService:
     """
@@ -11,6 +13,7 @@ class StoreService:
     def __init__(self):
         self.shelveRepository = {} # (AX(BXC)) (IPS(PORTA??) ( GROUPADDR (Shelve))
         self.requestingData = set()
+        self.packetsCache = {}
 
     def receivePacket(self, packet):
         self.parsePacket(packet)
@@ -28,11 +31,25 @@ class StoreService:
             return
 
 
+    def getShelve(self,group_addr):
+        shelve = self.shelveRepository.get(group_addr)
+        if not shelve:
+            shelve = Shelve(group_addr)
+            self.shelveRepository[group_addr] = shelve
+        return shelve
+
     #https://kbandla.github.io/dpkt/creating_parsers.html
     def handleMCPacket(self, ip1, udp2):
         if udp2.dport == 19230: ## PORTA DO SERVIÇO DE DISCOVERY
             return
-        print(udp2.dport)
+        digest = xxhash.xxh64()
+        digest.update(udp2.body_bytes)
+        packet_digest = digest.hexdigest()
+        self.packetsCache[packet_digest] = udp2.body_bytes
+        packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s)
+        shelve = self.getShelve(ip1.dst_s)
+        shelve.addPacket(packet_report)
+
 
 
     def parsePacket(self, packet):
@@ -48,5 +65,9 @@ class StoreService:
             self.handleMCPacket(ip1, udp2)
             return
 
-    def requestPacket(self,addr):
+    def requestPackets(self,packet_digest):
+        return self.packetsCache.pop(packet_digest,None)
+
+
+    def deadPacket(self,packet_digest):
         pass

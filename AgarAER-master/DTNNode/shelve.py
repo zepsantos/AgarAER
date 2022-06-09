@@ -10,13 +10,22 @@ class Shelve:
 
     def __init__(self, group_addr):
         self.group_addr = group_addr
-        self.cachedPackets = queue.Queue()
-        #self.cleanThread = RepeatTimer(1,self.clean)
-        #self.cleanThread.daemon = True
-        #self.cleanThread.start()
+        self.portToPacketDic = {}
 
-    def addPacket(self, packet,port):
-        self.cachedPackets.put(packet)
+
+    def addPacket(self, packet_report):
+        packetQ = self.getPortQueue(packet_report.get_port())
+        packetQ.put(packet_report)
+
+
+
+
+    def getPortQueue(self,port):
+        packetQ = self.portToPacketDic.get(port)
+        if not packetQ:
+            packetQ = queue.Queue()
+            self.portToPacketDic[port] = packetQ
+        return packetQ
 
     def clean(self):
         pass

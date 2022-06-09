@@ -3,10 +3,13 @@ import datetime
 
 class NeighborStat:
 
-    def __init__(self,addr):
+    def __init__(self,addr,isOverlayNode):
         self.counter = 0
         self.lastTimeSeen = self.generate_timestamp()
-        self.averageDelay = 10000
+        self.averageDelay = 0
+        self.averageDelayToOverlay = 0
+        self.lastTimeUpdateAverageOverlay = None
+        self.isOverlayNode = isOverlayNode
         self.timeList = []
         self.addr = addr
 
@@ -35,3 +38,14 @@ class NeighborStat:
 
     def get_lastTimeSeen(self):
         return self.lastTimeSeen
+
+
+    def get_average_delay(self):
+        return self.averageDelay
+
+    def get_average_delay_overlay(self):
+        return (self.averageDelayToOverlay, self.lastTimeUpdateAverageOverlay)
+
+    def set_average_delay_overlay(self,delay,timestamp):
+        self.averageDelayToOverlay = delay
+        self.lastTimeUpdateAverageOverlay = timestamp

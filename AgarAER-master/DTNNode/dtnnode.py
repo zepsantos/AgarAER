@@ -4,6 +4,7 @@ from discovery import Discovery
 from repeatTimer import RepeatTimer
 from storeService import StoreService
 from helloMessage import HelloMessage
+from forwardService import ForwardService
 
 class DTNNode:
     def __init__(self,isOverlayNode):
@@ -15,6 +16,7 @@ class DTNNode:
         self.multicastTable = {}
         self.neighbors_peers_view = self.peer.getNeighborsIPView()
         self.storeService = StoreService()
+        self.forwardService = ForwardService(self.peer,self.storeService)
 
     def start(self):
         hellomessage = self.buildHelloMessage()
@@ -26,6 +28,15 @@ class DTNNode:
     def buildHelloMessage(self):
         hellomessage = HelloMessage()
         hellomessage.set_isOverlay(self.isOverlayNode)
+        overlayneighlist = self.peer.get_overlay_neighbors()
+        min = 10000
+        stat = None
+        for ovneigh in overlayneighlist:
+            (delay,timestamp) = ovneigh.get_overlay_stats()
+            if delay < min:
+                min = delay
+                stat = (delay,timestamp)
+        hellomessage.set_overlayStats(stat)
         return hellomessage
 
     def updateMulticastWatchAddr(self):
@@ -36,10 +47,10 @@ class DTNNode:
             return
         toRemoveSet = address_set.difference(peersset)
         tmpAddressSet = address_set.difference(toRemoveSet)
-        print(tmpAddressSet)
-        print(peersset)
         toAddSet = tmpAddressSet.add(peersset)
-        toAddSet.add(self.ip)
+        if len(toAddSet) == 0 : # Falta aqui a condição do forwardService
+            toAddSet.add(self.ip)
+
         for addr in toRemoveSet:
             self.mc.removeAddressFromSniff(addr)
         for addr in toAddSet:
@@ -51,9 +62,12 @@ class DTNNode:
         timer.start()
         self.peer.listenPeerMessages(self.onPeerMessageReceived) ## CUIDADO COM O FIO DE EXECUÇÃO , talvez usar uma queue para passar os dados
 
+
     def onPeerMessageReceived(self,message,addr):
         pass
 
+
+    ## PACOTE RECEBIDO PELO SNIFFER
     def onPacketReceived(self,packet):
         self.storeService.receivePacket(packet)
 

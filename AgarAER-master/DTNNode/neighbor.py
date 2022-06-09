@@ -9,7 +9,7 @@ class Neighbor:
 
     def __init__(self, ip):
         self.ip = ip
-        self.stats = NeighborStat(self.ip)
+        self.stats = NeighborStat(self.ip,self.isOverlay)
         self.isOverlay = False
         self.connected = False
         self.checkAliveDaemon = RepeatTimer(1, self.checkAlive)
@@ -45,3 +45,14 @@ class Neighbor:
 
     def set_isOverlay(self,isOverlayNode):
         self.isOverlay = isOverlayNode
+
+
+    def isOverlay(self):
+        return self.isOverlay
+
+    def get_stats(self):
+        return self.stats
+
+
+    def get_overlay_stats(self):
+        return self.stats.get_average_delay_overlay()

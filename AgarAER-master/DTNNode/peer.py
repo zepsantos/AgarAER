@@ -3,7 +3,7 @@ import uuid
 import socket
 
 import dill
-
+from message import MessageTypes
 from neighbor import Neighbor
 from discovery import Discovery
 
@@ -34,10 +34,30 @@ class Peer:
 
     def newPeer(self, recObject):
         data, addr = recObject
-        if addr in self.neighbors:
+        hellomessage = dill.loads(data)
+        if hellomessage.get_type() != MessageTypes.HELLO_MESSAGE:
+            return
+        neighb = self.neighbors.get(addr, None)
+        if neighb:
             neighb = self.neighbors[addr]
             neighb.alive()
-        self.neighbors[addr] = Neighbor(addr)
+        else:
+            neighb = Neighbor(addr)
+            self.neighbors[addr] = neighb
+        if hellomessage.isOverlay():
+            neighb.set_isOverlay(True)
+        else:
+            overlayStats = hellomessage.get_overlayStats()
+            if overlayStats:
+                delay,timestamp = overlayStats
+                neighb.get_stats().set_average_delay_overlay(delay,timestamp)
 
     def getNeighborsIPView(self):
         return self.neighbors.keys()
+
+    def get_overlay_neighbors(self):
+        lst = []
+        for neigh in self.neighbors:
+            if neigh.isOverlay():
+                lst.append(neigh)
+        return lst

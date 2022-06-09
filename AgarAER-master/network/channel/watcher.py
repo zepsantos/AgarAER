@@ -20,9 +20,9 @@ class Watcher:
         interface_index = socket.if_nametoindex(
             "eth0")  # loop over interfaces to get the desired interface instead of hardcoded
 
-        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 10)
+        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 20)
         # self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
-        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 10)
+        self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 20)
         mc_addr = ipaddress.IPv6Address(self.group_addr)
         join_data = struct.pack('16sI', mc_addr.packed, interface_index)
         self.mtcsock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, join_data)
