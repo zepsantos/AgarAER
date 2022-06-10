@@ -4,7 +4,7 @@ class ForwarderPredictor:
         self.neighbors = neighbors
         self.stats_helper = {}
 
-    def predict(self):
+    def predict(self): ## DAR LOGO O RESULTADO DE UM NO OVERLAY SE TIVER LIGADO A UM
         min = 100000
         predictedaddr = None
         for addr,metric in self.stats_helper:

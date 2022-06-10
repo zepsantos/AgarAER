@@ -68,7 +68,7 @@ class DTNNode:
 
             online_neigh = self.peer.get_online_neighbors()
             if len(online_neigh) == 0: continue
-            self.forwardService.forward()
+            self.forwardService.forward() #TODO: ENVIAR MENSAGEM DE FORWARD CASO O PROXIMO NO SEJA PARA CAPTURAR
 
 
 

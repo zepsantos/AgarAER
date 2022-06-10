@@ -12,7 +12,7 @@ class ForwardService:
         self.nextHopNeighbor = None
         self.storeService = storeService
 
-    def forwardPacket(self,packet_report,addr):
+    def forwardPacket(self, packet_report, addr):
         packet_digest = packet_report.get_digest()
         packet = self.storeService.requestPackets(packet_digest)
         dtnpacket = DTNPacket(packet_report.packet_src, packet_report.packet_dst,
@@ -22,7 +22,7 @@ class ForwardService:
     def call_predictor(self):
         self.nextHopNeighbor = self.predictor.predict()
 
-    def forward(self):
+    def forward(self):## CHAMAR O PREDICTOR ANTES DE DAR FORWARD GARANTE QUE SO PREVEMOS O NEXT HOP QUANDO TAMOS COM ALGUM VIZINHO
         if self.nextHopNeighbor is None:
             return
         if self.nextHopNeighbor.isAlive():
