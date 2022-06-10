@@ -16,6 +16,7 @@ class Peer:
         self.sock = socket.socket(socket.AF_INET6,  # Internet
                                   socket.SOCK_DGRAM)
         self.sock.bind((Peer.UDP_IP, Peer.UDP_PORT))
+        self.ip = self.sock.getsockname()[0] ##TODO:TESTAR
 
     def listenPeerMessages(self, onPeerMessageReceived):
         listenthread = threading.Thread(target=self.receivePeerMessages, args=(onPeerMessageReceived,))
@@ -62,9 +63,20 @@ class Peer:
         return lst
 
 
+    def get_online_neighbors(self):
+        lst = []
+        for neigh in self.neighbors:
+            if neigh.isAlive():
+                lst.append(neigh)
+        return lst
+
     def get_neighborsaddr_to_sniff(self):
         tmp = set()
         for n in self.neighbors:
             if n.sniff:
                 tmp.add(n.ip)
         return tmp
+
+
+    def get_ip(self):
+        return self.ip

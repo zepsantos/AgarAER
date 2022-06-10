@@ -9,7 +9,7 @@ class Neighbor:
 
     def __init__(self, ip):
         self.ip = ip
-        self.stats = NeighborStat(self.ip,self.isOverlay)
+        self.stats = NeighborStat(self.ip, self.isOverlay)
         self.isOverlay = False
         self.sniff = False
         self.connected = False
@@ -45,9 +45,8 @@ class Neighbor:
         ts = ct.timestamp()
         return ts
 
-    def set_isOverlay(self,isOverlayNode):
+    def set_isOverlay(self, isOverlayNode):
         self.isOverlay = isOverlayNode
-
 
     def isOverlay(self):
         return self.isOverlay
@@ -55,9 +54,8 @@ class Neighbor:
     def get_stats(self):
         return self.stats
 
-
     def get_overlay_stats(self):
         return self.stats.get_average_delay_overlay()
 
-    def set_sniff(self,boolean):
+    def set_sniff(self, boolean):
         self.sniff = boolean

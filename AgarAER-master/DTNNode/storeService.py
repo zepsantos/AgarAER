@@ -13,7 +13,7 @@ class StoreService:
     """
 
     def __init__(self):
-        self.shelveRepository = {} # (AX(BXC)) (IPS(PORTA??) ( GROUPADDR (Shelve))
+        self.shelveRepository = {} # GRUPO_ADDR X PORT X QUEUE
         self.requestingData = set()
         self.deadCertificatesHistory = {}
         self.packetsCache = {}
@@ -91,3 +91,7 @@ class StoreService:
 
     def convertDTNPacketToPacketReport(self, dtnpacket):
         return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr)
+
+
+    def getShelves(self):
+        return self.shelveRepository

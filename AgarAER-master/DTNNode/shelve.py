@@ -30,5 +30,14 @@ class Shelve:
             self.portToPacketDic[port] = packetQ
         return list(packetQ)
 
+    def listPortQueueSortedByTimestamp(self):
+        tmp = []
+        for p,pqueue in self.portToPacketDic:
+            sortedList = sorted(pqueue, key=lambda x: x.timestamp)
+            tmp.append((p,sortedList))
+            #
+
+        return
+
     def clean(self):
         pass

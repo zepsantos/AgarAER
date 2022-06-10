@@ -5,7 +5,8 @@ class NeighborStat:
 
     def __init__(self,addr,isOverlayNode):
         self.counter = 0
-        self.lastTimeSeen = self.generate_timestamp()
+        self.lastTimeSeen = 10000
+        self.passedByTime = 10000
         self.averageDelay = 0
         self.averageDelayToOverlay = 0
         self.lastTimeUpdateAverageOverlay = None
@@ -17,6 +18,7 @@ class NeighborStat:
         self.counter += 1
         timediff = self.get_time_diff()
         self.update_lastTimeSeen()
+        self.passedByTime = self.lastTimeSeen
         self.timeList.append(timediff)
         sum = 0
         for t in self.timeList:
@@ -49,3 +51,7 @@ class NeighborStat:
     def set_average_delay_overlay(self,delay,timestamp):
         self.averageDelayToOverlay = delay
         self.lastTimeUpdateAverageOverlay = timestamp
+
+
+    def get_passedByTime(self):
+        return self.passedByTime

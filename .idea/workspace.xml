@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Pequenas mudanças pelos tipos de mensagens. Something else.">
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/deliveryService.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/requestService.py" afterDir="false" />
+    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Mudança de estruturas de dados. Novos serviços , etc">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnpacket.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnpacket.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardMessage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighbor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighborStat.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/neighborStat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/peer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
     </list>
@@ -18,7 +19,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="29953" />
+    <option name="totalTimeSeconds" value="35370" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -177,7 +178,8 @@
       <workItem from="1654631386483" duration="4096000" />
       <workItem from="1654699168720" duration="6282000" />
       <workItem from="1654721599319" duration="13318000" />
-      <workItem from="1654787720253" duration="10973000" />
+      <workItem from="1654787720253" duration="11300000" />
+      <workItem from="1654867962524" duration="8357000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>
@@ -228,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654796305324</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Mudança de estruturas de dados. Novos serviços , etc">
+      <created>1654834266137</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1654834266137</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,7 +261,8 @@
     <MESSAGE value="core topo em xml" />
     <MESSAGE value="Algoritmo de forwarding feito , não testado , informação sobre os nós que são overlay a passar pelos nodos na hellomessage" />
     <MESSAGE value="Pequenas mudanças pelos tipos de mensagens. Something else." />
-    <option name="LAST_COMMIT_MESSAGE" value="Pequenas mudanças pelos tipos de mensagens. Something else." />
+    <MESSAGE value="Mudança de estruturas de dados. Novos serviços , etc" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mudança de estruturas de dados. Novos serviços , etc" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
