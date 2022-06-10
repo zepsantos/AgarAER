@@ -15,7 +15,9 @@ class StoreService:
     def __init__(self):
         self.shelveRepository = {} # (AX(BXC)) (IPS(PORTA??) ( GROUPADDR (Shelve))
         self.requestingData = set()
+        self.deadCertificatesHistory = {}
         self.packetsCache = {}
+        self.dtnMessagesCache = {}
 
     def receivePacket(self, packet):
         self.parsePacket(packet)
@@ -71,5 +73,21 @@ class StoreService:
         return self.packetsCache.pop(packet_digest,None)
 
 
-    def deadPacket(self,packet_digest):
-        pass
+    def deadPacketReceived(self,deadCertificate):
+        packet_digest = deadCertificate.message_hash
+        if packet_digest in deadCertificate:
+            return
+        self.deadCertificatesHistory[packet_digest] = deadCertificate
+        self.packetsCache.pop(packet_digest)
+
+
+    def dtnPacketReceived(self,dtnPacket):
+        if dtnPacket.digest in self.packetsCache:
+            return
+        packet_report = self.convertDTNPacketToPacketReport(dtnPacket)
+        self.packetsCache[dtnPacket.digest] = dtnPacket.packet
+        shelve = self.getShelve(dtnPacket.dest_addr)
+        shelve.addPacket(packet_report)
+
+    def convertDTNPacketToPacketReport(self, dtnpacket):
+        return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr)

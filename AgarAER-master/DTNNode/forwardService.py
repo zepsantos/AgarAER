@@ -4,7 +4,7 @@ from forwarderPredictor import ForwarderPredictor
 from dtnpacket import DTNPacket
 
 class ForwardService:
-
+    """Class que trata de dar forward dos pacotes da cache """
     def __init__(self, peer, storeService):
         self.peer = peer
         self.predictor = ForwarderPredictor(self.peer.neighbors)

@@ -50,8 +50,7 @@ class DTNNode:
         toRemoveSet = address_set.difference(peersset)
         tmpAddressSet = address_set.difference(toRemoveSet)
         toAddSet = tmpAddressSet.add(peersset)
-        if len(toAddSet) == 0:  # Falta aqui a condição do forwardService
-            toAddSet.add(self.ip)
+        toAddSet.add(self.ip)
 
         for addr in toRemoveSet:
             self.mc.removeAddressFromSniff(addr)
@@ -63,6 +62,7 @@ class DTNNode:
         timer.daemon = True
         timer.start()
         self.peer.listenPeerMessages(self.onPeerMessageReceived)  ## CUIDADO COM O FIO DE EXECUÇÃO , talvez usar uma queue para passar os dados
+
 
     def onPeerMessageReceived(self, message, addr):
         handler_peerMessage = {MessageTypes.FORWARD_MESSAGE: self.handleForwardMessage,
@@ -79,10 +79,10 @@ class DTNNode:
         return
 
     def handleDTNPacket(self, message, addr):
-        pass
+        self.storeService.dtnPacket(message)
 
     def handleDeadCertificateMessage(self, message, addr):
-        pass
+        self.storeService.deadPacket(message)
 
     ## PACOTE RECEBIDO PELO SNIFFER
     def onPacketReceived(self, packet):

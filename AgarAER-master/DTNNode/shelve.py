@@ -1,4 +1,4 @@
-import queue
+from collections import deque
 
 
 class Shelve:
@@ -12,20 +12,23 @@ class Shelve:
         self.group_addr = group_addr
         self.portToPacketDic = {}
 
-
     def addPacket(self, packet_report):
         packetQ = self.getPortQueue(packet_report.get_port())
-        packetQ.put(packet_report)
+        packetQ.append(packet_report)
 
-
-
-
-    def getPortQueue(self,port):
+    def getPortQueue(self, port):  # TODO: Testar aqui a deque
         packetQ = self.portToPacketDic.get(port)
         if not packetQ:
-            packetQ = queue.Queue()
+            packetQ = deque()
             self.portToPacketDic[port] = packetQ
-        return packetQ
+        return deque(packetQ)
+
+    def getPortQueueAsList(self, port):  # TODO: Testar aqui a deque
+        packetQ = self.portToPacketDic.get(port)
+        if not packetQ:
+            packetQ = deque()
+            self.portToPacketDic[port] = packetQ
+        return list(packetQ)
 
     def clean(self):
         pass

@@ -12,3 +12,7 @@ class DTNPacket(Message):
         self.digest = packet_digest
         self.packet = packet
         self.packet_timestamp = packet_timestamp
+
+
+    def get_packet_dst_address(self):
+        return self.dest_addr
