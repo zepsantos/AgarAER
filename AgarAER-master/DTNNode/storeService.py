@@ -50,7 +50,7 @@ class StoreService:
         digest.update(udp2.body_bytes)
         packet_digest = digest.hexdigest()
         self.packetsCache[packet_digest] = udp2.body_bytes
-        packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s)
+        packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s,False)
         shelve = self.getShelve(ip1.dst_s)
         shelve.addPacket(packet_report)
 
@@ -90,8 +90,21 @@ class StoreService:
         shelve.addPacket(packet_report)
 
     def convertDTNPacketToPacketReport(self, dtnpacket):
-        return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr)
+        return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr,dtnpacket.fromOverlay)
 
 
     def getShelves(self):
         return self.shelveRepository
+    
+    
+    def clear(self):
+        pass
+    
+    
+    def getDeadCertificateNotSeen(self,addr):
+        tmplst = []
+        for dc in self.deadCertificatesHistory.values():
+            if not dc.hasPassed(addr):
+                tmplst.append(dc)
+        return tmplst
+            

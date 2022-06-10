@@ -6,9 +6,10 @@ from enum import Enum
 class MessageTypes(Enum):
     HELLO_MESSAGE = 1
     ACK_MESSAGE = 2,
-    FORWARD_MESSAGE = 3, #CRIAR ESTA MENSAGEM
+    FORWARD_MESSAGE = 3, 
     DEAD_CERTIFICATE = 4,
-    DTN_MESSAGE = 5
+    DTN_MESSAGE = 5,
+    REQUEST_MESSAGE = 6
     
 
 

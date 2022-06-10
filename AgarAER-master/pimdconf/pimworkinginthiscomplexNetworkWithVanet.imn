@@ -65,8 +65,8 @@ node n3 {
 	!
     }
     canvas c1
-    iconcoords {312.3333333333333 327.0}
-    labelcoords {312.3333333333333 359.0}
+    iconcoords {368.3333333333333 321.0}
+    labelcoords {368.3333333333333 353.0}
     interface-peer {eth0 n2}
     interface-peer {eth1 n4}
     services {OSPFv2 OSPFv3 RIPNG zebra IPForward}
@@ -107,8 +107,8 @@ node n5 {
 	!
     }
     canvas c1
-    iconcoords {96.0 479.0}
-    labelcoords {96.0 511.0}
+    iconcoords {86.0 513.0}
+    labelcoords {86.0 545.0}
     interface-peer {eth0 n2}
     interface-peer {eth1 n6}
     services {OSPFv2 OSPFv3 RIPNG zebra IPForward}
@@ -122,8 +122,8 @@ node n6 {
 	hostname n6
 	!
 	interface eth2
-	 ip address 10.0.0.1/32
 	 ipv6 address 2001:9::1/128
+	 ip address 10.0.0.1/
 	!
 	interface eth1
 	 ipv6 address 2001:5::1/64
@@ -133,8 +133,8 @@ node n6 {
 	!
     }
     canvas c1
-    iconcoords {273.0 484.0}
-    labelcoords {273.0 516.0}
+    iconcoords {337.0 524.0}
+    labelcoords {337.0 556.0}
     interface-peer {eth0 n5}
     interface-peer {eth1 n3}
     services {OSPFv2 OSPFv3 RIPNG zebra IPForward}
@@ -148,8 +148,8 @@ node n7 {
 	hostname n7
 	!
 	interface eth2
-	 ip address 10.0.0.4/32
 	 ipv6 address 2001:9::4/128
+	 ip address 10.0.0.4/
 	!
 	interface eth1
 	 ipv6 address 2001:7::2/64
@@ -159,8 +159,8 @@ node n7 {
 	!
     }
     canvas c1
-    iconcoords {229.0 245.0}
-    labelcoords {229.0 277.0}
+    iconcoords {227.0 155.0}
+    labelcoords {227.0 187.0}
     interface-peer {eth0 n2}
     interface-peer {eth1 n3}
     services {OSPFv2 OSPFv3 RIPNG zebra IPForward}
@@ -178,8 +178,8 @@ node n8 {
 	!
     }
     canvas c1
-    iconcoords {69.0 588.0}
-    labelcoords {69.0 620.0}
+    iconcoords {117.0 632.0}
+    labelcoords {117.0 664.0}
     interface-peer {eth0 n5}
 }
 
@@ -189,8 +189,8 @@ node n9 {
 	hostname wlan9
 	!
 	interface wireless
-	 ip address 10.0.0.0/32
 	 ipv6 address 2001:9::0/128
+	 ip address 10.0.2.0/32
 	!
 	mobmodel
 	coreapi
@@ -215,6 +215,7 @@ node n9 {
     interface-peer {e1 n12}
     interface-peer {e2 n11}
     interface-peer {e3 n7}
+    interface-peer {e4 n10}
 }
 
 node n11 {
@@ -225,11 +226,12 @@ node n11 {
 	!
 	interface eth0
 	 ipv6 address 2001:9::3/128
+	 ip address 10.0.0.3/
 	!
     }
     canvas c1
-    iconcoords {363.0 701.0}
-    labelcoords {363.0 733.0}
+    iconcoords {469.0 543.0}
+    labelcoords {469.0 575.0}
     interface-peer {eth0 n9}
     services {OSPFv3MDR RIPNG zebra IPForward}
 }
@@ -242,13 +244,31 @@ node n12 {
 	!
 	interface eth0
 	 ipv6 address 2001:9::2/128
+	 ip address 10.0.0.2/
 	!
     }
     canvas c1
-    iconcoords {378.0 428.0}
-    labelcoords {378.0 460.0}
+    iconcoords {520.0 402.0}
+    labelcoords {520.0 434.0}
     interface-peer {eth0 n9}
     services {OSPFv3MDR RIPNG zebra IPForward}
+}
+
+node n10 {
+    type router
+    model mdr
+    network-config {
+	hostname n10
+	!
+	interface eth0
+	 ipv6 address 2001:9::5/128
+	 ip address 10.0.0.5/
+	!
+    }
+    canvas c1
+    iconcoords {593.0 273.0}
+    labelcoords {593.0 305.0}
+    interface-peer {eth0 n9}
 }
 
 link l1 {
@@ -310,6 +330,10 @@ link l13 {
 
 link l11 {
     nodes {n9 n7}
+}
+
+link l14 {
+    nodes {n9 n10}
 }
 
 canvas c1 {

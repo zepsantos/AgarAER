@@ -5,6 +5,10 @@ class ForwarderPredictor:
         self.stats_helper = {}
 
     def predict(self): ## DAR LOGO O RESULTADO DE UM NO OVERLAY SE TIVER LIGADO A UM
+        overlaynode = self.checkIfConnectedToOverlayNode()
+        if overlaynode is not None:
+            return overlaynode
+
         min = 100000
         predictedaddr = None
         for addr,metric in self.stats_helper:
@@ -15,7 +19,11 @@ class ForwarderPredictor:
                 predictedaddr = addr
         return self.neighbors[predictedaddr]
 
-
+    def checkIfConnectedToOverlayNode(self):
+        for n in self.neighbors:
+            if n.isAlive() and n.isOverlay():
+                return n
+        return None
 
     def update_stats_helper(self):
         for k,neigh in self.neighbors:
