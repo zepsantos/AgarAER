@@ -9,17 +9,15 @@ class RequestService:
     def __init__(self, peer, storeService):
         self.peer = peer
         self.storeService = storeService
-    
+        self.addrHasSeen = {}
     
     def requestOverlayPacket(self,addr):
         shelves = self.storeService.getShelves()
-        requestStatHelper = []
         for shelve in shelves:
             requestm = RequestMessage(shelve.group_addr)
             portxpacket = shelve.listPortQueueSortedByTimestamp()
             result = map(lambda port,packet : (port,packet[-1].timestamp),portxpacket) # TODO:CONFIRMAR ISTO
-            requestStatHelper = result
-            requestm.set_mrg(requestStatHelper)
+            requestm.set_mrg(result)
             self.peer.sendMessageToNeighbour(requestm,addr)
             
             
