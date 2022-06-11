@@ -7,7 +7,7 @@ class PacketReport():
         self.port = port
         self.packet_src = src_packet
         self.packet_dst = dest_packet
-        self.fromOverlay = False
+        self.fromOverlay = fromOverlay
         self.timestamp = self.generate_timestamp()
 
 

@@ -3,6 +3,7 @@ import dill
 from discovery import Discovery
 from requestService import RequestService
 from forwardService import ForwardService
+from deliveryService import DeliveryService
 from helloMessage import HelloMessage
 from multicastSniffer import multicastSniffer
 from peer import Peer
@@ -20,7 +21,8 @@ class DTNNode:
         self.isOverlayNode = isOverlayNode
         self.storeService = StoreService()
         self.forwardService = ForwardService(self.peer, self.storeService)
-        self.requestService = RequestService()
+        self.requestService = RequestService(self.peer,self.storeService)
+        self.deliveryService = DeliveryService(self.storeService)
         self.threadPool = ThreadPoolExecutor(10)
 
     def start(self):
@@ -70,11 +72,14 @@ class DTNNode:
             if len(online_neigh) == 0: continue
             for n in online_neigh:
                 self.threadPool.submit(self.sendDeadCertificate,n)
-            self.forwardService.forward() 
+            self.threadPool.submit(self.forwardService.forward)
+            for shelve in self.storeService.getShelves():
+                self.requestService.requestOverlayPacket(shelve.group_addr)
             
     def sendDeadCertificate(self,neigh):
         tmplst = self.storeService.getDeadCertificateNotSeen(neigh.ip)
         for dc in tmplst:
+            dc.passedBy(neigh.ip)
             self.peer.sendMessageToNeighbour(dc,neigh.ip)
         
         
@@ -82,7 +87,8 @@ class DTNNode:
     def onPeerMessageReceived(self, message, addr):
         handler_peerMessage = {MessageTypes.FORWARD_MESSAGE: self.handleForwardMessage,
                                MessageTypes.DTN_MESSAGE: self.handleDTNPacket,
-                               MessageTypes.DEAD_CERTIFICATE: self.handleDeadCertificateMessage}
+                               MessageTypes.DEAD_CERTIFICATE: self.handleDeadCertificateMessage,
+                               MessageTypes.REQUEST_MESSAGE: self.handleRequestMessage}
         unpck_msg = dill.loads(message)
         handler = handler_peerMessage.get(unpck_msg.get_type(), None)
         if handler:
@@ -94,12 +100,20 @@ class DTNNode:
             for neig in message.addrlst:
                 self.peer.neighbors[neig].set_sniff(True)
         return
+    
+    def handleRequestMessage(self,message,addr):
+        packetsList = self.requestService.acceptRequest(message,addr)
+        for p in packetsList:
+            self.forwardService.forwardPacket(p,addr)
+        
 
     def handleDTNPacket(self, message, addr):
+        packet_report = self.storeService.dtnPacketReceived(message)
         if  self.isOverlayNode:
             pass
         else:
-            self.storeService.dtnPacketReceived(message)
+            if message.fromOverlay:
+                self.deliveryService.deliverOnNode(packet_report)
 
     def handleDeadCertificateMessage(self, message, addr):
         self.storeService.deadPacketReceived(message)

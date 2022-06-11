@@ -70,7 +70,7 @@ class StoreService:
             return
 
     def requestPackets(self,packet_digest):
-        return self.packetsCache.pop(packet_digest,None)
+        return self.packetsCache.get(packet_digest,None)
 
 
     def deadPacketReceived(self,deadCertificate):
@@ -88,6 +88,7 @@ class StoreService:
         self.packetsCache[dtnPacket.digest] = dtnPacket.packet
         shelve = self.getShelve(dtnPacket.dest_addr)
         shelve.addPacket(packet_report)
+        return packet_report
 
     def convertDTNPacketToPacketReport(self, dtnpacket):
         return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr,dtnpacket.fromOverlay)
@@ -96,6 +97,9 @@ class StoreService:
     def getShelves(self):
         return self.shelveRepository
     
+    
+    def getShelve(self,group_addr):
+        return self.shelveRepository.get(group_addr,None)
     
     def clear(self):
         pass

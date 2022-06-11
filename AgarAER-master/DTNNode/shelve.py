@@ -34,7 +34,18 @@ class Shelve:
     def listPortQueueSortedByTimestamp(self):
         tmp = []
         for p,pqueue in self.portToPacketDic:
-            sortedList = sorted(pqueue, key=lambda x: x.timestamp)
+            sortedList = sorted(pqueue, key=lambda x: x.timestamp) ## TESTAR ISTO
+            tmp.append((p,sortedList))
+            #
+        return tmp
+    
+    
+    
+    def listPortQueueSortedByTimestampFiltered(self,filterFunction):
+        tmp = []
+        for p,pqueue in self.portToPacketDic:
+            filtered =  filter(filterFunction,pqueue)
+            sortedList = sorted(filtered, key=lambda x: x.timestamp) ## TESTAR ISTO
             tmp.append((p,sortedList))
             #
         return tmp
@@ -44,7 +55,6 @@ class Shelve:
         for q in  self.portToPacketDic.values():
             for packet_report in q:
                 if packet_report.fromOverlay:
-                    
                     res.append(packet_report)
         
             

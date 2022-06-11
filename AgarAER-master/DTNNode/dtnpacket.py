@@ -12,7 +12,7 @@ class DTNPacket(Message):
         self.digest = packet_digest
         self.packet = packet
         self.packet_timestamp = packet_timestamp
-        self.fromOverlay = False
+        self.fromOverlay = fromOverlay
 
 
     def get_packet_dst_address(self):
