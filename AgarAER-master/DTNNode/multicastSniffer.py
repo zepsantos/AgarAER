@@ -1,6 +1,6 @@
 import socket
 import threading
-
+import logging
 from pypacker.layer12 import ethernet
 from pypacker.layer3 import ip6, icmp6
 
@@ -31,6 +31,7 @@ class multicastSniffer:
 
     def sniffPacketsLoop(self, onPacketReceived):
         while True:
+            #logging.debug(f'address sniffing {self.sniffAddr}')
             data = self.rawsocket.recv(multicastSniffer.ETH_FRAME_LEN)
             if self.checkPacketAddr(data):
                 onPacketReceived(data)

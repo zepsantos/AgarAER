@@ -13,6 +13,8 @@ class Painter:
     def add(self, drawable):
         self.paintings.append(drawable)
 
+    def remove(self,drawable):
+        self.paintings.remove(drawable)
 
     def paint(self):
         for drawing in self.paintings:

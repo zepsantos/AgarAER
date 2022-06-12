@@ -1,26 +1,23 @@
 import datetime
 import logging
-
+import time
 from neighborStat import NeighborStat
-from repeatTimer import RepeatTimer
+from repeatTimer import setInterval
 
 
 class Neighbor:
 
     def __init__(self, ip):
         self.ip = ip
-        self.stats = NeighborStat(self.ip, self.isOverlay)
-        self.isOverlay = False
+        self.stats = NeighborStat(self.ip)
         self.sniff = False
         self.connected = False
-        self.checkAliveDaemon = RepeatTimer(1, self.checkAlive)
-        self.checkAliveDaemon.daemon = True
-        self.checkAliveDaemon.start()
+        self.checkAliveDaemon = self.checkAlive()
 
     def alive(self):
         if not self.connected:
             self.connected = True
-            self.checkAliveDaemon.start()
+            self.checkAliveDaemon = self.checkAlive()
             self.stats.passedBy()
         else:
             self.stats.update_lastTimeSeen()
@@ -28,16 +25,20 @@ class Neighbor:
     ## VERIFICAR SE TA CERTO
     def isAlive(self):
         current_time = self.generate_timestamp()
-        self.connected = ((current_time - self.stats.get_lastTimeSeen()) < 70)
+        timepassed = (current_time - self.stats.get_lastTimeSeen())
+        self.connected = timepassed < 0.7
         return self.connected
 
+    @setInterval(.7)
     def checkAlive(self):
-        logging.debug('CheckAliveNeighb Thread a correr')
-        if not self.isAlive():
+        #logging.debug('CheckAliveNeighb Thread a correr')
+        aliveStatus = self.isAlive()
+        if aliveStatus == False:
             self.sniff = False
-            logging.debug('CheckAliveNeighb Thread a parar de correr')
-            self.checkAliveDaemon.cancel()
+            #logging.debug('CheckAliveNeighb Thread a parar de correr')
+            self.checkAliveDaemon.set()
         else:
+            
             return
 
     def generate_timestamp(self):
@@ -46,10 +47,10 @@ class Neighbor:
         return ts
 
     def set_isOverlay(self, isOverlayNode):
-        self.isOverlay = isOverlayNode
+        self.stats.isOverlayNode = isOverlayNode
 
     def isOverlay(self):
-        return self.isOverlay
+        return self.stats.isOverlayNode
 
     def get_stats(self):
         return self.stats

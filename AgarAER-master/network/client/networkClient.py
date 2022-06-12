@@ -8,8 +8,10 @@ from ..channel import Watcher
 
 
 def icslistenparameter(data, addr):
-    unpck = pickle.loads(data)
-    return unpck.get_type() == MessageType.AUTHENTICATION_RESPONSE
+    if data:
+        unpck = pickle.loads(data)
+        return unpck.get_type() == MessageType.AUTHENTICATION_RESPONSE
+    return False
 
 def gameChannelBool(data, addr):
     unpck = pickle.loads(data)
@@ -35,10 +37,12 @@ class NetworkClient:
         self.sock.sendto(pckmsg, (self.group_addr,self.authGamePort))
         self.gameReportPort = msg.get_port()
         watch_authchannel = Watcher(self.UDP_IP, self.gameReportPort,self.group_addr)
-        data,addr = watch_authchannel.listenWhileTimeout(icslistenparameter,1000)
-        if data is None:
+        try:
+            data,addr = watch_authchannel.listenWhileTimeout(icslistenparameter,100)
+        except socket.timeout:
             gameConfigListener({})
-            return
+        # while data is None:
+            #data,addr = watch_authchannel.listenWhileTimeout(icslistenparameter,10000)
         authresponse = pickle.loads(data)
         config = authresponse.get_config()
         for i in range(0,authresponse.get_last_packet_no()):

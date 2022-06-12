@@ -1,8 +1,8 @@
 import socket
 import threading
-
+import netifaces as ni
 import dill
-
+import logging
 from message import MessageTypes
 from neighbor import Neighbor
 
@@ -11,12 +11,13 @@ class Peer:
     UDP_IP = '::'
     UDP_PORT = 10000
 
-    def __init__(self):
+    def __init__(self, interface):
         self.neighbors = dict()
         self.sock = socket.socket(socket.AF_INET6,  # Internet
                                   socket.SOCK_DGRAM)
-        self.sock.bind((Peer.UDP_IP, Peer.UDP_PORT))
-        self.ip = self.sock.getsockname()[0] ##TODO:TESTAR
+        self.ip = ni.ifaddresses(interface)[ni.AF_INET6][0]['addr']
+
+        self.sock.bind((self.ip, Peer.UDP_PORT))
 
     def listenPeerMessages(self, onPeerMessageReceived):
         listenthread = threading.Thread(target=self.receivePeerMessages, args=(onPeerMessageReceived,))
@@ -30,15 +31,19 @@ class Peer:
 
     def sendMessageToNeighbour(self, message, addr):
         pickledmessage = dill.dumps(message)
-        self.sock.sendto(pickledmessage, addr)
+        addrwport = ((addr), Peer.UDP_PORT)
+        self.sock.sendto(pickledmessage, addrwport)
+
+
 
     def newPeer(self, recObject):
-        data, addr = recObject
+        data, fulladdr = recObject
+        addr = fulladdr[0]
         hellomessage = dill.loads(data)
         if hellomessage.get_type() != MessageTypes.HELLO_MESSAGE:
             return
         neighb = self.neighbors.get(addr, None)
-        if neighb:
+        if neighb is not None:
             neighb = self.neighbors[addr]
             neighb.alive()
         else:
@@ -49,34 +54,36 @@ class Peer:
         else:
             overlayStats = hellomessage.get_overlayStats()
             if overlayStats:
-                delay,timestamp = overlayStats
-                neighb.get_stats().set_average_delay_overlay(delay,timestamp)
+                delay, timestamp = overlayStats
+                neighb.get_stats().set_average_delay_overlay(delay, timestamp)
 
     def getNeighborsIPView(self):
         return self.neighbors.keys()
 
     def get_overlay_neighbors(self):
         lst = []
-        for neigh in self.neighbors:
+        tmp = list(self.neighbors.values())
+        for neigh in tmp:
             if neigh.isOverlay():
                 lst.append(neigh)
         return lst
 
-
     def get_online_neighbors(self):
         lst = []
-        for neigh in self.neighbors:
-            if neigh.isAlive():
+        tmp = list(self.neighbors.values())
+        for neigh in tmp:
+            if neigh.connected:
                 lst.append(neigh)
+        # logging.debug(f'list online: {lst}')
         return lst
 
     def get_neighborsaddr_to_sniff(self):
         tmp = set()
-        for n in self.neighbors:
+        lst = list(self.neighbors.values())
+        for n in lst:
             if n.sniff:
                 tmp.add(n.ip)
         return tmp
-
 
     def get_ip(self):
         return self.ip

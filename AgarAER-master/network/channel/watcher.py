@@ -2,6 +2,7 @@ import datetime
 import socket
 import struct
 import ipaddress
+import time
 
 
 class Watcher:
@@ -43,14 +44,17 @@ class Watcher:
                 return data, addr
 
     def listenWhileTimeout(self, fnbool,timeout):
-        self.mtcsock.setblocking(False)
+        self.mtcsock.setblocking(True)
         current_time = self.generate_timestamp()
         while True:
-            last_time = self.generate_timestamp()
-            if timeout > last_time - current_time:
+
+            elapsed_time = self.generate_timestamp() - current_time
+            print(elapsed_time)
+            if elapsed_time > timeout:
                 return None,None
-            current_time = last_time
+            self.mtcsock.settimeout(timeout)
             data, addr = self.mtcsock.recvfrom(1400)
+            self.mtcsock.settimeout(None)
             if fnbool(data, addr):
                 return data, addr
 

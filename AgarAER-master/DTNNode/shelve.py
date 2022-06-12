@@ -1,5 +1,5 @@
 from collections import deque
-
+import logging 
 
 class Shelve:
     """
@@ -14,15 +14,14 @@ class Shelve:
 
     def addPacket(self, packet_report):
         packetQ = self.getPortQueue(packet_report.get_port()) 
-        
         packetQ.append(packet_report)
 
     def getPortQueue(self, port):  # TODO: Testar aqui a deque
-        packetQ = self.portToPacketDic.get(port)
-        if not packetQ:
+        packetQ = self.portToPacketDic.get(port,None)
+        if packetQ is None:
             packetQ = deque()
             self.portToPacketDic[port] = packetQ
-        return deque(packetQ)
+        return packetQ
 
     def getPortQueueAsList(self, port):  # TODO: Testar aqui a deque
         packetQ = self.portToPacketDic.get(port)
@@ -33,7 +32,7 @@ class Shelve:
 
     def listPortQueueSortedByTimestamp(self):
         tmp = []
-        for p,pqueue in self.portToPacketDic:
+        for p,pqueue in self.portToPacketDic.items():
             sortedList = sorted(pqueue, key=lambda x: x.timestamp) ## TESTAR ISTO
             tmp.append((p,sortedList))
             #
@@ -43,7 +42,7 @@ class Shelve:
     
     def listPortQueueSortedByTimestampFiltered(self,filterFunction):
         tmp = []
-        for p,pqueue in self.portToPacketDic:
+        for p,pqueue in self.portToPacketDic.items():
             filtered =  filter(filterFunction,pqueue)
             sortedList = sorted(filtered, key=lambda x: x.timestamp) ## TESTAR ISTO
             tmp.append((p,sortedList))

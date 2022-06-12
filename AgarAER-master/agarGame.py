@@ -61,7 +61,6 @@ class agarGame :
             playerMove = self.current_play_queue.get()
             #print('playerMove: ' ,playerMove['x'], playerMove['y'], playerMove['mass'])
             self.current_player.update(playerMove['x'], playerMove['y'], playerMove['mass'])
-
             self.reactToInput()
             counter += 1
             self.current_player.move()    
@@ -95,6 +94,10 @@ class agarGame :
         while not self.current_play_queue.empty():
             self.current_play_queue.get_nowait()
   ## verificar no painter se existem os players de forma a remover dps
+
+
+
+
     def drawPlayers(self):
         for p in self.players.values():
             if not p.is_onScreen():
@@ -136,8 +139,9 @@ class agarGame :
         self.current_player = player
         
     def remove_player(self,player):
-        self.players.pop(player)
-        pass
+        p = self.players.pop(player)
+        self.painter.remove(p)
+
 
     def update_player(self, id, x, y, mass):
         if id in self.players:
@@ -147,7 +151,7 @@ class agarGame :
         logging.debug("Received update from server ping: {}".format(msg.get_ping()))
         self.packets_in += 1
         game = msg.get_game_state()
-        if msg.get_newplayers_status() :
+        if msg.get_newplayers_status():
             for p in msg.get_newplayers():
                 if p['id'] not in self.players:
                     self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])
@@ -158,11 +162,22 @@ class agarGame :
         cells_eaten = game.get('cells_eaten', [])
         for cell in cells_eaten:
             self.cells.removeByPoint(cell)
-
+        if len(players) < len(self.players):
+            self.playerDisconnected(players)
         for player in players:
             self.update_player(player['id'], player['x'], player['y'], player['mass'])
             if player['id'] == self.current_player.get_id():
                 self.current_play_queue.put_nowait(player)
+
+    def playerDisconnected(self,players_server):
+        tmp = set(map(lambda p : p['id'],players_server))
+        tmpl = list(self.players.values())
+        for p in tmpl:
+            if p.get_id() not in tmp:
+                if p.get_id() == self.current_player.get_id():
+                    pygame.quit()
+                self.remove_player(p.get_id())
+
 
     def configGame(self,p,game):
         self.add_player(p['id'],p['x'],p['y'],p['mass'],p['color'],p['speed'],p['name'])

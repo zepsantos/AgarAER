@@ -1,4 +1,5 @@
 import threading
+import time
 from json.tool import main
 import pygame,random,math
 
@@ -58,6 +59,7 @@ def initConnectionToServer():
 # Inicia a thread que vai escutar o canal do jogo e o jogo
 def startGame(config):
     if config == {}:
+        time.sleep(1)
         client.initConnectionToServer(player_name,startGame)
         return
     logging.info('Config obtida: {}'.format(config))

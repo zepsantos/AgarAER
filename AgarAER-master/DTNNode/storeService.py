@@ -2,9 +2,10 @@ import xxhash
 from pypacker.layer12 import ethernet
 from pypacker.layer3 import ip6, icmp6
 from pypacker.layer4 import udp
-
+import logging
 from packetReport import PacketReport
 from shelve import Shelve
+from deadCertificate import DeadCertificate
 
 
 class StoreService:
@@ -19,7 +20,7 @@ class StoreService:
         self.packetsCache = {}
         self.dtnMessagesCache = {}
 
-    def receivePacket(self, packet):
+    def receivePacket(self, packet):        
         self.parsePacket(packet)
 
     def handleICMP(self, ip1, icmp1):
@@ -28,7 +29,7 @@ class StoreService:
             return
         elif icmp1.type == icmp6.MLD_LISTENER_REPORT:
             self.requestingData.add(ip1.src_s)
-            print('icmp1 body_bytes: ' ,icmp1.body_bytes)
+            print('icmp1 body_bytes: ' ,str(icmp1.body_bytes))
             return
         elif icmp1.type == icmp6.MLD_LISTENER_DONE:
             self.requestingData.remove(ip1.src_s)
@@ -36,23 +37,28 @@ class StoreService:
 
 
     def getShelve(self,group_addr):
-        shelve = self.shelveRepository.get(group_addr)
-        if not shelve:
+        shelve = self.shelveRepository.get(group_addr,None)
+        if shelve is None:
             shelve = Shelve(group_addr)
             self.shelveRepository[group_addr] = shelve
         return shelve
 
     #https://kbandla.github.io/dpkt/creating_parsers.html
     def handleMCPacket(self, ip1, udp2):
-        if udp2.dport == 19230: ## PORTA DO SERVIÇO DE DISCOVERY
+        if udp2.dport == 19230 or udp2.dport == 10000: ## PORTA DO SERVIÇO DE DISCOVERY
             return
         digest = xxhash.xxh64()
         digest.update(udp2.body_bytes)
         packet_digest = digest.hexdigest()
         self.packetsCache[packet_digest] = udp2.body_bytes
         packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s,False)
+        
         shelve = self.getShelve(ip1.dst_s)
+        
         shelve.addPacket(packet_report)
+        logging.debug(f'packet_report : {shelve.listPortQueueSortedByTimestamp()}')
+
+        
 
 
 
@@ -60,7 +66,7 @@ class StoreService:
         eth = ethernet.Ethernet(packet)
         ip1 = eth[ip6.IP6]
         icmp1 = ip1[icmp6.ICMP6]
-        udp2 = ip1[udp.UDP]
+        udp2 = ip1[udp.UDP]        
         if icmp1:
             self.handleICMP(ip1, icmp1)
             return
@@ -83,6 +89,7 @@ class StoreService:
 
     def dtnPacketReceived(self,dtnPacket):
         if dtnPacket.digest in self.packetsCache:
+            logging.debug(f'packet already in cache')
             return
         packet_report = self.convertDTNPacketToPacketReport(dtnPacket)
         self.packetsCache[dtnPacket.digest] = dtnPacket.packet
@@ -95,14 +102,16 @@ class StoreService:
 
 
     def getShelves(self):
-        return self.shelveRepository
+        return self.shelveRepository.values()
     
-    
-    def getShelve(self,group_addr):
-        return self.shelveRepository.get(group_addr,None)
     
     def clear(self):
         pass
+
+    def generateDeadCertifiticate(self,packet_digest):
+        tmp = DeadCertificate(packet_digest)
+        self.deadCertificatesHistory[packet_digest] = tmp
+
     
     
     def getDeadCertificateNotSeen(self,addr):

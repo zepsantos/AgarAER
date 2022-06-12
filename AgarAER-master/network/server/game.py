@@ -1,12 +1,31 @@
 import uuid
 from .player import ServerPlayer
 from .cell import CellList
+import threading
+import logging
+def setInterval(interval):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            stopped = threading.Event()
+
+            def loop(): # executed in another thread
+                while not stopped.wait(interval): # until stopped
+                    function(*args, **kwargs)
+
+            t = threading.Thread(target=loop)
+            t.daemon = True # stop if the program exits
+            t.start()
+            return stopped
+        return wrapper
+    return decorator
+
 class Game:
     def __init__(self) -> None:
         self.players = {}
         self.cells = CellList(500)
         self.port = 6000
         self.newplayers = []
+        self.checkAlive()
 
     def add_player(self,addr,id,name,port):
         if id is None:
@@ -79,9 +98,24 @@ class Game:
         return self.cells.get_list()
 
 
-    def remove_player(self):
-        pass
+    def remove_player(self,id):
+        logging.info(f'player has disconnected {id}')
+        self.players.pop(id)
 
 
     def get_port(self):
         return self.port
+
+    @setInterval(1)
+    def checkAlive(self):
+        tmpl = list(self.players.values())
+        for p in tmpl:
+            range = 250000
+            if p.lastTimeSeen == p.firstTimeSeen:
+                range = 10000000
+            if p.getLastTimeSeenDifMilis() > range:
+                logging.info(f'removing player {p.id} , range {range}')
+                self.remove_player(p.id)
+
+
+
