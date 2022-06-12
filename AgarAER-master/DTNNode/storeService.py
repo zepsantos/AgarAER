@@ -95,7 +95,6 @@ class StoreService:
         return packet_report
 
     def convertDTNPacketToPacketReport(self, dtnpacket):
-        logging.debug(f'converting dtn {dtnpacket.fromOverlay}')
         return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr,dtnpacket.fromOverlay)
 
 

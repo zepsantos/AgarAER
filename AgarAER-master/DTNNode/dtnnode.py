@@ -62,7 +62,7 @@ class DTNNode:
         hellomessage.set_overlayStats(stat)
         return hellomessage
 
-    @setInterval(0.5)
+    @setInterval(1)
     def updateMulticastWatchAddr(self):  # TESTAR IsTO
         peersset = self.peer.get_neighborsaddr_to_sniff()
         address_set = self.mc.watchAddresses()
@@ -71,12 +71,11 @@ class DTNNode:
             return
         toRemoveSet = address_set.difference(peersset)
         tmpAddressSet = address_set.difference(toRemoveSet)
-        toAddSet = tmpAddressSet.add(peersset)
-        toAddSet.add(self.peer.get_ip())
-        logging.debug(f'toADDSET: {toAddSet}')
+        self.mc.sniffAddress(self.peer.ip)
+        #logging.debug(f'toADDSET: {to AddSet}')
         for addr in toRemoveSet:
             self.mc.removeAddressFromSniff(addr)
-        for addr in toAddSet:
+        for addr in peersset:
             self.mc.sniffAddress(addr)
 
     def startNode(self):
@@ -86,24 +85,27 @@ class DTNNode:
         if not self.isOverlayNode:
             self.requestServiceThread()
         while True:
-            time.sleep(0.5)
             online_neigh = self.peer.get_online_neighbors()
             #logging.debug(f'online neigh count : {len(online_neigh)}')
             if len(online_neigh) == 0: continue
             for n in online_neigh:
-                self.threadPool.submit(self.sendDeadCertificate, n)
+                pass
+                #self.threadPool.submit(self.sendDeadCertificate, n)
             if not self.isOverlayNode:
                 self.threadPool.submit(self.forwardService.forward)
 
 
-    @setInterval(1)
+    @setInterval(0.2)
     def requestServiceThread(self):
         for n in self.peer.get_online_neighbors():
             self.requestService.requestOverlayPacket(n.ip)
 
     def sendDeadCertificate(self, neigh):
         tmplst = self.storeService.getDeadCertificateNotSeen(neigh.ip)
+        if len(tmplst) > 0 :
+            logging.debug(f'sending dead certificates')
         for dc in tmplst:
+
             dc.passedBy(neigh.ip)
             self.peer.sendMessageToNeighbour(dc, neigh.ip)
 
@@ -159,6 +161,7 @@ class DTNNode:
                 self.deliveryService.deliverOnNode(packet_report)
 
     def handleDeadCertificateMessage(self, message, addr):
+        logging.debug(f'received dead certificate')
         self.storeService.deadPacketReceived(message)
 
     ## PACOTE RECEBIDO PELO SNIFFER

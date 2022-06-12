@@ -32,7 +32,7 @@ class DeliveryService:
         return sock """
 
     def deliverToOverlay(self, packet_report):
-        logging.debug(f'delivering packet {packet_report.packet_dst}  {packet_report.port} {packet_report.get_digest()}')
+       # logging.debug(f'delivering packet {packet_report.packet_dst}  {packet_report.port} {packet_report.get_digest()}')
        # logging.debug(f'packet : {self.storeService}  {self.storeService.requestPackets}')
         packet = self.storeService.requestPacket(packet_report.get_digest())
 

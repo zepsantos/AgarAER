@@ -1,6 +1,7 @@
 from dtnnode import DTNNode
 import argparse
 import logging
+import cProfile
 def run():
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(filename)s:%(funcName)s - %(message)s')
@@ -16,6 +17,5 @@ def run():
         dtnnode = DTNNode(True,args.i,args.o)
     
     dtnnode.start()
-
 
 run()

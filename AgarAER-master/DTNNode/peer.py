@@ -32,7 +32,10 @@ class Peer:
     def sendMessageToNeighbour(self, message, addr):
         pickledmessage = dill.dumps(message)
         addrwport = ((addr), Peer.UDP_PORT)
-        self.sock.sendto(pickledmessage, addrwport)
+        try:
+            self.sock.sendto(pickledmessage, addrwport)
+        except OSError as o:
+            return
 
     def newPeer(self, hellomessage, addr):
 
@@ -70,7 +73,7 @@ class Peer:
         for neigh in tmp:
             if neigh.connected:
                 lst.append(neigh)
-        #logging.debug(f'list online: {lst}')
+        # logging.debug(f'list online: {lst}')
         return lst
 
     def get_neighborsaddr_to_sniff(self):
