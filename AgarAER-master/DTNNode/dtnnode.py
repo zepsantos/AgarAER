@@ -95,7 +95,7 @@ class DTNNode:
                 self.threadPool.submit(self.forwardService.forward)
 
 
-    @setInterval(0.2)
+    @setInterval(0.3)
     def requestServiceThread(self):
         for n in self.peer.get_online_neighbors():
             self.requestService.requestOverlayPacket(n.ip)
