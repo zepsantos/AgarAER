@@ -86,7 +86,7 @@ class agarGame :
                 counter = 0
                 packet_out = 0
                 self.packets_in = 0
-                #self.clearPlaysQueue()
+                self.clearPlaysQueue()
             # Start calculating next frame
             pygame.display.flip()
     
@@ -148,7 +148,7 @@ class agarGame :
             self.players[id].update(x, y, mass)
 
     def update_game(self, msg):
-        logging.debug("Received update from server ping: {}".format(msg.get_ping()))
+        logging.info("Received update from server ping: {}".format(msg.get_ping()))
         self.packets_in += 1
         game = msg.get_game_state()
         if msg.get_newplayers_status():

@@ -1,5 +1,7 @@
 from collections import deque
-import logging 
+import logging
+import datetime
+
 
 class Shelve:
     """
@@ -64,4 +66,19 @@ class Shelve:
             tmpqueue.remove(packet_report)
     
     def clean(self):
-        pass
+        listtoClean = []
+        tmpl = list(self.portToPacketDic.values())
+        current_time =self.generate_timestamp()
+        for pqueue in tmpl:
+            sizequeue = len(pqueue)
+            if sizequeue > 100:
+                halfqueue = round(sizequeue/2)
+                for i in range(0,halfqueue):
+                    pqueue.popleft()
+        return listtoClean
+
+
+    def generate_timestamp(self):
+        ct = datetime.datetime.now()
+        ts = ct.timestamp()
+        return ts

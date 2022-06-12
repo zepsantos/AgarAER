@@ -1,6 +1,9 @@
+from collections import deque
 import queue
+import threading
 from struct import pack
 import logging
+import time
 from forwarderPredictor import ForwarderPredictor
 from dtnpacket import DTNPacket
 from forwardMessage import Forward_Message
@@ -15,7 +18,17 @@ class ForwardService:
         self.nextHopNeighbor = None
         self.storeService = storeService
         self.controlMessages = []
+        self.forwardQueue = deque()
+        self.forwardingToPeer = threading.Thread(target=self.forwardLoop)
+        self.forwardingToPeer.daemon = True
+        self.forwardingToPeer.start()
         self.neighHasSeen = {}
+
+    def forwardLoop(self):
+        while True:
+            if len(self.forwardQueue) == 0: continue
+            packet_report, addr = self.forwardQueue.popleft()
+            self.peer.sendMessageToNeighbour(packet_report,addr)
 
     def forwardPacket(self, packet_report, addr):
         packet_digest = packet_report.get_digest()
@@ -26,7 +39,7 @@ class ForwardService:
             return False
         dtnpacket = DTNPacket(packet_report.packet_src, packet_report.packet_dst,
                               packet_report.port, packet, packet_digest, packet_report.timestamp, packet_report.fromOverlay)
-        self.peer.sendMessageToNeighbour(dtnpacket, addr)
+        self.forwardQueue.append((dtnpacket,addr))
         return True
 
     def call_predictor(self):

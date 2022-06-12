@@ -24,7 +24,7 @@ class DTNNode:
         self.mc = multicastSniffer(interface)
         self.isOverlayNode = isOverlayNode
         self.overlayInterface = overlayInterface
-        if self.isOverlayNode :
+        if self.isOverlayNode:
             self.mcwatcher = MulticastWatcher(self.overlayInterface)
             self.mcoverlaysniffer = multicastSniffer(self.overlayInterface)
         self.storeService = StoreService()
@@ -89,23 +89,19 @@ class DTNNode:
             #logging.debug(f'online neigh count : {len(online_neigh)}')
             if len(online_neigh) == 0: continue
             for n in online_neigh:
-                pass
-                #self.threadPool.submit(self.sendDeadCertificate, n)
+                self.threadPool.submit(self.sendDeadCertificate, n)
             if not self.isOverlayNode:
-                self.threadPool.submit(self.forwardService.forward)
+                self.threadPool.submit(self.forwardService.forward())
 
 
-    @setInterval(0.3)
+    @setInterval(0.2)
     def requestServiceThread(self):
         for n in self.peer.get_online_neighbors():
             self.requestService.requestOverlayPacket(n.ip)
 
     def sendDeadCertificate(self, neigh):
         tmplst = self.storeService.getDeadCertificateNotSeen(neigh.ip)
-        if len(tmplst) > 0 :
-            logging.debug(f'sending dead certificates')
         for dc in tmplst:
-
             dc.passedBy(neigh.ip)
             self.peer.sendMessageToNeighbour(dc, neigh.ip)
 

@@ -6,7 +6,7 @@ import logging
 from packetReport import PacketReport
 from shelve import Shelve
 from deadCertificate import DeadCertificate
-
+from repeatTimer import setInterval
 
 class StoreService:
     """
@@ -18,7 +18,7 @@ class StoreService:
         self.requestingData = set()
         self.deadCertificatesHistory = {}
         self.packetsCache = {}
-        self.dtnMessagesCache = {}
+        self.clear()
 
     def receivePacket(self, packet,fromOverlay):
         self.parsePacket(packet,fromOverlay)
@@ -101,9 +101,17 @@ class StoreService:
     def getShelves(self):
         return self.shelveRepository.values()
     
-    
+    @setInterval(20)
     def clear(self):
-        pass
+        logging.debug('cleaning cache')
+        tmpls = list(self.getShelves())
+        packets_cleared = []
+        for shelve in tmpls:
+            packets_cleared.extend(shelve.clean())
+        for p in packets_cleared:
+            self.packetsCache.pop(p.get_digest())
+
+
 
     def generateDeadCertifiticate(self,packet_digest):
         tmp = DeadCertificate(packet_digest)
