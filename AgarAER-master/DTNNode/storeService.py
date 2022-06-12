@@ -20,16 +20,16 @@ class StoreService:
         self.packetsCache = {}
         self.dtnMessagesCache = {}
 
-    def receivePacket(self, packet):        
-        self.parsePacket(packet)
+    def receivePacket(self, packet,fromOverlay):
+        self.parsePacket(packet,fromOverlay)
 
     def handleICMP(self, ip1, icmp1):
-        print('icmp1 type:',icmp1.type)
+        #print('icmp1 type:',icmp1.type)
         if icmp1.type == icmp6.MLD_LISTENER_QUERY:
             return
         elif icmp1.type == icmp6.MLD_LISTENER_REPORT:
             self.requestingData.add(ip1.src_s)
-            print('icmp1 body_bytes: ' ,str(icmp1.body_bytes))
+            #print('icmp1 body_bytes: ' ,str(icmp1.body_bytes))
             return
         elif icmp1.type == icmp6.MLD_LISTENER_DONE:
             self.requestingData.remove(ip1.src_s)
@@ -44,25 +44,23 @@ class StoreService:
         return shelve
 
     #https://kbandla.github.io/dpkt/creating_parsers.html
-    def handleMCPacket(self, ip1, udp2):
+    def handleMCPacket(self, ip1, udp2,fromOverlay):
         if udp2.dport == 19230 or udp2.dport == 10000: ## PORTA DO SERVIÇO DE DISCOVERY
             return
         digest = xxhash.xxh64()
         digest.update(udp2.body_bytes)
         packet_digest = digest.hexdigest()
         self.packetsCache[packet_digest] = udp2.body_bytes
-        packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s,False)
-        
+        packet_report = PacketReport(packet_digest,udp2.dport,ip1.src_s,ip1.dst_s,fromOverlay)
         shelve = self.getShelve(ip1.dst_s)
         
         shelve.addPacket(packet_report)
-        logging.debug(f'packet_report : {shelve.listPortQueueSortedByTimestamp()}')
 
         
 
 
 
-    def parsePacket(self, packet):
+    def parsePacket(self, packet,fromOverlay):
         eth = ethernet.Ethernet(packet)
         ip1 = eth[ip6.IP6]
         icmp1 = ip1[icmp6.ICMP6]
@@ -72,10 +70,10 @@ class StoreService:
             return
 
         if udp2:
-            self.handleMCPacket(ip1, udp2)
+            self.handleMCPacket(ip1, udp2,fromOverlay)
             return
 
-    def requestPackets(self,packet_digest):
+    def requestPacket(self,packet_digest):
         return self.packetsCache.get(packet_digest,None)
 
 
@@ -89,7 +87,6 @@ class StoreService:
 
     def dtnPacketReceived(self,dtnPacket):
         if dtnPacket.digest in self.packetsCache:
-            logging.debug(f'packet already in cache')
             return
         packet_report = self.convertDTNPacketToPacketReport(dtnPacket)
         self.packetsCache[dtnPacket.digest] = dtnPacket.packet
@@ -98,6 +95,7 @@ class StoreService:
         return packet_report
 
     def convertDTNPacketToPacketReport(self, dtnpacket):
+        logging.debug(f'converting dtn {dtnpacket.fromOverlay}')
         return PacketReport(dtnpacket.digest,dtnpacket.port,dtnpacket.src_addr,dtnpacket.dest_addr,dtnpacket.fromOverlay)
 
 

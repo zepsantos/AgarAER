@@ -9,6 +9,6 @@ class RequestMessage(Message):
         self.group_addr = group_addr
         self.mrg = []
 
-    def set_mrg(self, dictWithMCStats):
-        self.mrg = dictWithMCStats
+    def set_mrg(self, listwithmcstats):
+        self.mrg = listwithmcstats
     

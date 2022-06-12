@@ -58,11 +58,7 @@ def initConnectionToServer():
 
 # Inicia a thread que vai escutar o canal do jogo e o jogo
 def startGame(config):
-    if config == {}:
-        time.sleep(1)
-        client.initConnectionToServer(player_name,startGame)
-        return
-    logging.info('Config obtida: {}'.format(config))
+    #logging.info('Config obtida: {}'.format(config))
     agargame = agarGame()
     p = config['player']
     game = config['game']
@@ -71,8 +67,12 @@ def startGame(config):
     listenGameThread.start()
     agargame.set_atTickIsOver(send_playerUpdateToServer)
     agargame.startGameLoop()
-    
-    
+    """if config == {}:
+            time.sleep(1)
+            client.initConnectionToServer(player_name,startGame)
+            return"""
+
+
 #Envia reports dos jogadores para o servidor
 def send_playerUpdateToServer(player,cells):
     p_update = {'rotation':player.get_lastrotation(), 'mass':player.get_mass(), 'cells_eaten': cells.get_eaten_cells() }

@@ -34,12 +34,8 @@ class Peer:
         addrwport = ((addr), Peer.UDP_PORT)
         self.sock.sendto(pickledmessage, addrwport)
 
+    def newPeer(self, hellomessage, addr):
 
-
-    def newPeer(self, recObject):
-        data, fulladdr = recObject
-        addr = fulladdr[0]
-        hellomessage = dill.loads(data)
         if hellomessage.get_type() != MessageTypes.HELLO_MESSAGE:
             return
         neighb = self.neighbors.get(addr, None)
@@ -74,7 +70,7 @@ class Peer:
         for neigh in tmp:
             if neigh.connected:
                 lst.append(neigh)
-        # logging.debug(f'list online: {lst}')
+        #logging.debug(f'list online: {lst}')
         return lst
 
     def get_neighborsaddr_to_sniff(self):

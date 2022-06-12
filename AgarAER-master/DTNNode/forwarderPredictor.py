@@ -15,7 +15,7 @@ class ForwarderPredictor:
         overlaynode, addr = self.checkIfConnectedToOverlayNode(neighbors)
 
         if overlaynode is not None:
-            logging.debug(f'predicted overlay node : {overlaynode.ip}')
+            #logging.debug(f'predicted overlay node : {overlaynode.ip}')
             return overlaynode
 
         min = 100000

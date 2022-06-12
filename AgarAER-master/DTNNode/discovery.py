@@ -7,12 +7,15 @@ from random import uniform
 
 import dill
 import netifaces as ni
+import logging
 
 
 class Discovery:
 
-    def __init__(self, newPeerListener):
-        self.UDP_IP = str(ni.ifaddresses('eth0')[socket.AF_INET6][0]['addr'])
+    def __init__(self,interface, newPeerListener):
+        self.interface = interface
+        self.UDP_IP = str(ni.ifaddresses(interface)[socket.AF_INET6][0]['addr'])
+        logging.debug(f'discovery ip : {self.UDP_IP}')
         self.discoveryPort = 19230
         self.group_addr = 'ff0e::3'
         self.sock = socket.socket(socket.AF_INET6,  # Internet
@@ -27,9 +30,7 @@ class Discovery:
 
     def config_socketMTC(self):
         # Getting interfaces
-        interfaces = ni.interfaces()
-        interface = interfaces[1]
-        interface_index = socket.if_nametoindex(interface)
+        interface_index = socket.if_nametoindex(self.interface)
         self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 10)
         self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 0)
         self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 10)
@@ -53,7 +54,8 @@ class Discovery:
     def discoverPeers(self):
         while True:
             data, addr = self.sock.recvfrom(1400)
-            self.newPeerListener((data,addr))
+            self.newPeerListener(data,addr)
+
 
 
 

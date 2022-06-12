@@ -19,13 +19,13 @@ class ForwardService:
 
     def forwardPacket(self, packet_report, addr):
         packet_digest = packet_report.get_digest()
-        packet = self.storeService.requestPackets(packet_digest)
+        packet = self.storeService.requestPacket(packet_digest)
         #logging.debug(f'predicted forward {self.nextHopNeighbor}')
 
         if packet is None:
             return False
         dtnpacket = DTNPacket(packet_report.packet_src, packet_report.packet_dst,
-                              packet_report.port, packet, packet_digest, packet_report.timestamp, False)
+                              packet_report.port, packet, packet_digest, packet_report.timestamp, packet_report.fromOverlay)
         self.peer.sendMessageToNeighbour(dtnpacket, addr)
         return True
 
@@ -45,9 +45,10 @@ class ForwardService:
             return packet_digest in tmpset
         return False
 
-    def forward(
-            self):  ## CHAMAR O PREDICTOR ANTES DE DAR FORWARD GARANTE QUE SO PREVEMOS O NEXT HOP QUANDO TAMOS COM ALGUM VIZINHO
+    def forward(self):  ## CHAMAR O PREDICTOR ANTES DE DAR FORWARD GARANTE QUE SO PREVEMOS O NEXT HOP QUANDO TAMOS COM ALGUM VIZINHO
+        #logging.debug('forward')
         self.call_predictor()
+        #logging.debug(f'predicted hop: {self.nextHopNeighbor.isOverlay()}')
         tmp_report_list = []
         if self.nextHopNeighbor is None:
             return

@@ -37,10 +37,7 @@ class NetworkClient:
         self.sock.sendto(pckmsg, (self.group_addr,self.authGamePort))
         self.gameReportPort = msg.get_port()
         watch_authchannel = Watcher(self.UDP_IP, self.gameReportPort,self.group_addr)
-        try:
-            data,addr = watch_authchannel.listenWhileTimeout(icslistenparameter,100)
-        except socket.timeout:
-            gameConfigListener({})
+        data,addr = watch_authchannel.listenWhile(icslistenparameter)
         # while data is None:
             #data,addr = watch_authchannel.listenWhileTimeout(icslistenparameter,10000)
         authresponse = pickle.loads(data)

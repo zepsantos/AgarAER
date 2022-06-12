@@ -8,11 +8,12 @@ def run():
     parser.add_argument('--i', type=str, required=True)
     parser.add_argument('--o', type=str)
     args = parser.parse_args()
-    print(args)
     if args.o is None:
-        dtnnode = DTNNode(False,args.i)
+        dtnnode = DTNNode(False,args.i, None)
     else:
-        dtnnode = DTNNode(True,args.i)    
+        tmplist = args.o.split(',')
+        logging.debug(f'interfaces args {tmplist}')
+        dtnnode = DTNNode(True,args.i,args.o)
     
     dtnnode.start()
 

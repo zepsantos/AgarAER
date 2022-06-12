@@ -110,9 +110,9 @@ class Game:
     def checkAlive(self):
         tmpl = list(self.players.values())
         for p in tmpl:
-            range = 250000
+            range = 2500000
             if p.lastTimeSeen == p.firstTimeSeen:
-                range = 10000000
+                range = 100000000
             if p.getLastTimeSeenDifMilis() > range:
                 logging.info(f'removing player {p.id} , range {range}')
                 self.remove_player(p.id)

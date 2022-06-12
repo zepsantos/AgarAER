@@ -2,7 +2,7 @@
 
 from urllib import request
 from requestMessage import RequestMessage
-
+import logging
 
 class RequestService:
 
@@ -12,15 +12,27 @@ class RequestService:
         self.addrHasSeen = {}
     
     def requestOverlayPacket(self,addr):
-        shelves = self.storeService.getShelves()
+        shelves = list(self.storeService.getShelves())
         for shelve in shelves:
             requestm = RequestMessage(shelve.group_addr)
             portxpacket = shelve.listPortQueueSortedByTimestamp()
-            result = map(lambda port,packet : (port,packet[-1].timestamp),portxpacket) # TODO:CONFIRMAR ISTO
+            result = self.buildRequestStats(portxpacket)
             requestm.set_mrg(result)
             self.peer.sendMessageToNeighbour(requestm,addr)
             
-            
+    def buildRequestStats(self,portxpacket):
+        tmp = []
+        for p,packetlist in portxpacket:
+            timestamp = None
+            if len(packetlist) == 0:
+                continue
+            elif len(packetlist) == 1:
+                timestamp = packetlist[0].timestamp
+            else:
+                timestamp = packetlist[-1].timestamp
+            tmp.append((p,timestamp))
+        return tmp
+
     def acceptRequest(self,requestMessage,addr):
         packets_tosend = []
         helper_dict = dict(requestMessage.mrg)

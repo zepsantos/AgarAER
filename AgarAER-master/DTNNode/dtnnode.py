@@ -1,3 +1,5 @@
+import threading
+
 import dill
 
 from discovery import Discovery
@@ -13,15 +15,18 @@ from storeService import StoreService
 from message import MessageTypes
 from concurrent.futures import ThreadPoolExecutor
 import logging
-
+from multicastWatcher import MulticastWatcher
 
 class DTNNode:
-    def __init__(self, isOverlayNode, interface):
+    def __init__(self, isOverlayNode, interface, overlayInterface):
         self.peer = Peer(interface)
-        self.discoveryService = Discovery(self.peer.newPeer)
+        self.discoveryService = Discovery(interface,self.newPeerDiscovery)
         self.mc = multicastSniffer(interface)
         self.isOverlayNode = isOverlayNode
-        logging.debug(f'isOverlayNode: {self.isOverlayNode}')
+        self.overlayInterface = overlayInterface
+        if self.isOverlayNode :
+            self.mcwatcher = MulticastWatcher(self.overlayInterface)
+            self.mcoverlaysniffer = multicastSniffer(self.overlayInterface)
         self.storeService = StoreService()
         self.forwardService = ForwardService(self.peer, self.storeService)
         self.requestService = RequestService(self.peer, self.storeService)
@@ -30,10 +35,17 @@ class DTNNode:
 
     def start(self):
         self.updateMulticastWatchAddr()
-        hellomessage = self.buildHelloMessage()
-        self.discoveryService.announcePeer(hellomessage)
-        self.mc.sniffPackets(self.onPacketReceived)
+        if not self.isOverlayNode:
+            hellomessage = self.buildHelloMessage()
+            self.discoveryService.announcePeer(hellomessage)
+            self.mc.sniffPackets(self.onPacketReceived,False)
+        else:
+            self.mcoverlaysniffer.sniffPackets(self.onPacketReceivedFromOverlay,True)
         self.startNode()
+
+
+    def onPacketReceivedFromOverlay(self,data):
+        self.threadPool.submit(self.storeService.receivePacket, data, True)
 
     def buildHelloMessage(self):
         hellomessage = HelloMessage()
@@ -41,6 +53,7 @@ class DTNNode:
         overlayneighlist = self.peer.get_overlay_neighbors()
         min = 10000
         stat = None
+
         for ovneigh in overlayneighlist:
             (delay, timestamp) = ovneigh.get_overlay_stats()
             if delay < min:
@@ -71,22 +84,22 @@ class DTNNode:
         self.peer.listenPeerMessages(
             self.onPeerMessageReceived)  ## CUIDADO COM O FIO DE EXECUÇÃO , talvez usar uma queue para passar os dados
         if not self.isOverlayNode:
-            pass
-            # self.requestServiceThread()
+            self.requestServiceThread()
         while True:
             time.sleep(0.5)
             online_neigh = self.peer.get_online_neighbors()
-            # logging.debug(f'online neigh count : {len(online_neigh)}')
+            #logging.debug(f'online neigh count : {len(online_neigh)}')
             if len(online_neigh) == 0: continue
             for n in online_neigh:
                 self.threadPool.submit(self.sendDeadCertificate, n)
             if not self.isOverlayNode:
                 self.threadPool.submit(self.forwardService.forward)
 
+
     @setInterval(1)
     def requestServiceThread(self):
-        for shelve in self.storeService.getShelves():
-            self.requestService.requestOverlayPacket(shelve.group_addr)
+        for n in self.peer.get_online_neighbors():
+            self.requestService.requestOverlayPacket(n.ip)
 
     def sendDeadCertificate(self, neigh):
         tmplst = self.storeService.getDeadCertificateNotSeen(neigh.ip)
@@ -98,12 +111,22 @@ class DTNNode:
         handler_peerMessage = {MessageTypes.FORWARD_MESSAGE: self.handleForwardMessage,
                                MessageTypes.DTN_MESSAGE: self.handleDTNPacket,
                                MessageTypes.DEAD_CERTIFICATE: self.handleDeadCertificateMessage,
-                               MessageTypes.REQUEST_MESSAGE: self.handleRequestMessage}
+                               MessageTypes.REQUEST_MESSAGE: self.handleRequestMessage,
+                               MessageTypes.HELLO_MESSAGE: self.handleHelloMessage}
         unpck_msg = dill.loads(message)
-
         handler = handler_peerMessage.get(unpck_msg.get_type(), None)
         if handler:
             self.threadPool.submit(handler, unpck_msg, addr[0])
+
+    def handleHelloMessage(self,message,addr):
+        self.peer.newPeer(message,addr)
+
+    def newPeerDiscovery(self,message,addr):
+        hellomessage = dill.loads(message)
+        if self.isOverlayNode:
+            hellomessage = self.buildHelloMessage()
+            self.peer.sendMessageToNeighbour(hellomessage, addr[0])
+        self.peer.newPeer(hellomessage,addr[0])
 
     def handleForwardMessage(self, message, addr):
         if message.toSniff():
@@ -113,15 +136,23 @@ class DTNNode:
         return
 
     def handleRequestMessage(self, message, addr):
+
         packetsList = self.requestService.acceptRequest(message, addr)
+
+        self.mcwatcher.joinGroup(message.group_addr)
+        self.mcoverlaysniffer.sniffAddress(message.group_addr)
+
         for p in packetsList:
             self.forwardService.forwardPacket(p, addr)
 
     def handleDTNPacket(self, message, addr):
         packet_report = self.storeService.dtnPacketReceived(message)
+
         if self.isOverlayNode:
             if packet_report.fromOverlay:  # REVER ISTO
                 return
+            self.deliveryService.deliverToOverlay(packet_report)
+
             self.storeService.generateDeadCertifiticate(packet_report.packet_digest)
         else:
             if message.fromOverlay:
@@ -132,7 +163,7 @@ class DTNNode:
 
     ## PACOTE RECEBIDO PELO SNIFFER
     def onPacketReceived(self, packet):  # TALVEZ EXECUTAR ISTO NA POOL DE THREADS
-        self.threadPool.submit(self.storeService.receivePacket, packet)
+        self.threadPool.submit(self.storeService.receivePacket, packet, False)
 
 
 if __name__ == '__main__':
