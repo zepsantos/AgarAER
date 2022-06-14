@@ -24,6 +24,7 @@ NAME = "agarAER.py"
 VERSION = "0.0"
 
 #Pygame initialization
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=1024)
 pygame.init()
 pygame.display.set_caption("{} - v{}".format(NAME, VERSION))
 

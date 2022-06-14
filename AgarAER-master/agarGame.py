@@ -53,7 +53,7 @@ class agarGame :
         debugtime = pygame.time.get_ticks()
         packet_out = 0
         while  True :
-            #self.clock.tick(60)
+            self.clock.tick(30)
             currentTime = pygame.time.get_ticks()
 
             #cell = Cell(common.MAIN_SURFACE, self.cam)
@@ -148,7 +148,7 @@ class agarGame :
             self.players[id].update(x, y, mass)
 
     def update_game(self, msg):
-        logging.info("Received update from server ping: {}".format(msg.get_ping()))
+        #logging.info("Received update from server ping: {}".format(msg.get_ping()))
         self.packets_in += 1
         game = msg.get_game_state()
         if msg.get_newplayers_status():

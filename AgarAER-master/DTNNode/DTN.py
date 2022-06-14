@@ -1,9 +1,9 @@
 from dtnnode import DTNNode
 import argparse
 import logging
-import cProfile
+
 def run():
-    logging.basicConfig(level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(filename)s:%(funcName)s - %(message)s')
     parser = argparse.ArgumentParser()
     parser.add_argument('--i', type=str, required=True)

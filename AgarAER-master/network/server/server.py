@@ -151,7 +151,7 @@ class Server:
         debugtime = pygame.time.get_ticks()
         packet_out = 0
         while True:
-            clock.tick(60)
+            clock.tick(30)
             currentTime = pygame.time.get_ticks()
             if currentTime - debugtime > 1000:
                 #logging.info("packet out {} ".format(packet_out))
