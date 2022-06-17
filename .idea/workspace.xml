@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Script mobility">
+    <list default="true" id="ac456698-313f-44ee-8065-48d7bbc308a3" name="Changes" comment="Final version , im done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/deliveryService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/deliveryService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/dtnnode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/forwardService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/multicastSniffer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/shelve.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/DTNNode/storeService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AgarAER-master/agarGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/agarGame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/agarAER.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgarAER-master/agarAER.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgarAER-master/runClient.py" beforeDir="false" />
     </list>
     <list id="81137c02-6cd3-4a7d-94e0-497cf71f93ee" name="Changes by josepgrs" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +19,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="78389" />
+    <option name="totalTimeSeconds" value="79706" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -205,7 +207,11 @@
       <workItem from="1654970172511" duration="612000" />
       <workItem from="1654997003860" duration="675000" />
       <workItem from="1654999300089" duration="15059000" />
-      <workItem from="1655047872452" duration="22500000" />
+      <workItem from="1655047872452" duration="23543000" />
+      <workItem from="1655156563552" duration="1773000" />
+      <workItem from="1655217772179" duration="1278000" />
+      <workItem from="1655343198014" duration="921000" />
+      <workItem from="1655489125721" duration="621000" />
     </task>
     <task id="LOCAL-00001" summary="Watcher dos canais.&#10;Autenticacao feita e cliente recebe configs do jogo.&#10;Servidor constantemente a anunciar os dados do jogo depois do jogo ter comecado num canal &#10;Cliente a receber esses dados .">
       <created>1654021934601</created>
@@ -305,7 +311,21 @@
       <option name="project" value="LOCAL" />
       <updated>1655066628367</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Final version , im done">
+      <created>1655072841415</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1655072841415</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Final version , im done">
+      <created>1655218785262</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1655218785262</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -335,10 +355,17 @@
     <MESSAGE value="Feito quase" />
     <MESSAGE value="Its working, falta rever os dead certificates" />
     <MESSAGE value="Script mobility" />
-    <option name="LAST_COMMIT_MESSAGE" value="Script mobility" />
+    <MESSAGE value="Final version , im done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final version , im done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/AgarAER-master/agarAER.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

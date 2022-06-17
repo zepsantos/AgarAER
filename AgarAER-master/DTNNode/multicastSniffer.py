@@ -57,6 +57,8 @@ class multicastSniffer:
     def checkPacketIncomingFromGroup(self,packet):
         eth = ethernet.Ethernet(packet)
         ip1 = eth[ip6.IP6]
+        if not ip1:
+            return False
         if ip1.dst_s in self.sniffAddr:  # Pode não ser o ip1.src_s
             return True
         else:
